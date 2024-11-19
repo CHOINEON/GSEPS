@@ -1,13 +1,9 @@
-// import { useState } from "react";
-
 import "./App.css";
+import router from "./app/routes";
+import { RouterProvider } from "react-router-dom";
 
 function App() {
-  return (
-    <>
-      <div>Hello World</div>
-    </>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
