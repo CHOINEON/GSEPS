@@ -1,12 +1,13 @@
-import React from "react";
-import { useEffect, useState } from "react";
 import Title from "antd/es/typography/Title";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const GT1: React.FC = () => {
   const [Today, setToday] = useState(new Date().toLocaleDateString());
-  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
-  
+  const [currentTime, setCurrentTime] = useState(
+    new Date().toLocaleTimeString()
+  );
+
   useEffect(() => {
     setToday(new Date().toLocaleDateString());
     setCurrentTime(new Date().toLocaleTimeString());
@@ -23,7 +24,7 @@ const GT1: React.FC = () => {
     <Flex>
       <Title level={2}>날짜 및 시간</Title>
       <Title level={3}>{Today}</Title>
-      <Title level={3}>{Time}</Title>
+      <Title level={3}>{currentTime}</Title>
     </Flex>
   );
 };
