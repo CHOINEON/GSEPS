@@ -1,11 +1,23 @@
 import React from "react";
+import { useEffect, useState } from "react";
 import Title from "antd/es/typography/Title";
 import styled from "styled-components";
 
 const GT1: React.FC = () => {
-  const now = new Date();
-  const Today = now.toLocaleDateString(); // 현재 날짜
-  const Time = now.toLocaleTimeString(); // 현재 시간
+  const [Today, setToday] = useState(new Date().toLocaleDateString());
+  const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
+  
+  useEffect(() => {
+    setToday(new Date().toLocaleDateString());
+    setCurrentTime(new Date().toLocaleTimeString());
+
+    const timer = setInterval(() => {
+      setToday(new Date().toLocaleDateString());
+      setCurrentTime(new Date().toLocaleTimeString());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   return (
     <Flex>
