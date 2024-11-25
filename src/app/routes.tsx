@@ -1,10 +1,9 @@
 import { createBrowserRouter, Outlet } from "react-router-dom";
-// import Layout from "../shared/router/Layout";
 import Main from "../pages/Main";
-import Tag from "../pages/Tag";
 import NotFound from "../pages/NotFound";
 import GT1 from "../pages/GT1/GT1";
 import GT2 from "../pages/GT2/GT2";
+
 //추후 publicRoute recstirct를 사용하여 로그인 여부 확인
 const router = createBrowserRouter([
   {
@@ -19,9 +18,6 @@ const router = createBrowserRouter([
           {
             path: "/main/GT1",
             element: <GT1 />,
-            // children: [
-            //   { path: "/dashboard/GT1/TagSelction", element: <Tag /> },
-            // ],
           },
           {
             path: "/main/GT2",
