@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Title from "antd/es/typography/Title";
 import styled from "styled-components";
-// import { Checkbox, Col, Row } from "antd";
 
-// const onChange = (checkedValues: CheckboxValueType[]) => {
-//   console.log("checked = ", checkedValues);
-// };
 const GT1: React.FC = () => {
   const [Today, setToday] = useState(new Date().toLocaleDateString());
   const [currentTime, setCurrentTime] = useState(
@@ -21,13 +17,6 @@ const GT1: React.FC = () => {
 
     return () => clearInterval(timer);
   }, []);
-
-  // const now = new Date();
-  // const Today = now.toLocaleDateString(); // 현재 날짜
-  // const Time = now.toLocaleTimeString([], {
-  //   hour: "2-digit",
-  //   minute: "2-digit",
-  // }); // 현재 시간
 
   return (
     <div>
