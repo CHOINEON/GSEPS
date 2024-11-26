@@ -3,6 +3,7 @@ import Title from "antd/es/typography/Title";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
 import { useEffect, useState } from "react";
+import PredictionChart from "../../components/PredictionChart";
 import DateTime from "../../features/Layout/components/DateTime";
 import { getSelectedForecast } from "../../features/api/PredictionApi";
 
@@ -73,10 +74,10 @@ const GT1: React.FC = () => {
 
   const getPastelColor = (index: number, totalTimes: number) => {
     const colors = [
-      "#ffb3b3", // 파스텔 빨강
-      "#ffd9b3", // 파스텔 주황
-      "#ffffb3", // 파스텔 노랑
-      "#b3ffb3", // 파스텔 초록
+      "#ffe6e6", // 파스텔 빨강
+      "#fff2e6", // 파스텔 주황
+      "#fffae6", // 파스텔 노랑
+      "#e6ffe6", // 파스텔 초록
     ];
 
     // 시간을 내림차순으로 정렬했을 때의 인덱스를 사용
@@ -270,6 +271,18 @@ const GT1: React.FC = () => {
         </div>
       </div>
 
+      {/* 차트 컨포넌트 */}
+      <div style={{ margin: "20px" }}>
+        {selectedForecast && predictionTimes.length > 0 && (
+          <PredictionChart
+            selectedForecast={selectedForecast}
+            predictionTimes={predictionTimes}
+            formatHour={formatHour}
+            getPredictionSum={getPredictionSum}
+          />
+        )}
+      </div>
+
       <div style={{ margin: "20px" }}>
         <Table
           title={() => "거래시간"}
@@ -285,10 +298,10 @@ const GT1: React.FC = () => {
 
       <style>
         {`
-          .prediction-row-0 td { background-color: #ffb3b3 !important; }
-          .prediction-row-1 td { background-color: #ffd9b3 !important; }
-          .prediction-row-2 td { background-color: #ffffb3 !important; }
-          .prediction-row-3 td { background-color: #b3ffb3 !important; }
+          .prediction-row-0 td { background-color: #ffe6e6 !important; }
+          .prediction-row-1 td { background-color: #fff2e6 !important; }
+          .prediction-row-2 td { background-color: #fffae6 !important; }
+          .prediction-row-3 td { background-color: #e6ffe6 !important; }
           .disabled-cell {
             color: #00000040;
             background-color: #f5f5f5;
