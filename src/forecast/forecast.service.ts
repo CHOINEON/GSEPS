@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Cron, SchedulerRegistry } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 import { MoreThanOrEqual } from 'typeorm';
@@ -15,29 +14,7 @@ export class ForecastService {
     private readonly configService: ConfigService,
     @InjectRepository(ForecastModel)
     private readonly forecastRepository: Repository<ForecastModel>,
-    private schedulerRegistry: SchedulerRegistry,
   ) {}
-
-  async onApplicationBootstrap() {
-    await this.upsertForecast();
-
-    const job = this.schedulerRegistry.getCronJob('weatherUpdate');
-    this.logger.log(`다음 날씨 업데이트 시간: ${job.nextDate()}`);
-  }
-
-  @Cron('0 1 * * * *', {
-    name: 'weatherUpdate',
-    timeZone: 'Asia/Seoul',
-  })
-  async scheduleUpsertForecast() {
-    this.logger.log('날씨 데이터 업데이트 시작');
-    try {
-      await this.upsertForecast();
-      this.logger.log('날씨 데이터 업데이트 완료');
-    } catch (error) {
-      this.logger.error('날씨 데이터 업데이트 실패:', error);
-    }
-  }
 
   // 3일 예보 데이터를 가져오는 함수
   async getForecast3Days(time: number): Promise<ForecastModel[]> {
@@ -50,6 +27,9 @@ export class ForecastService {
       },
       order: {
         forecastDate: 'ASC',
+      },
+      relations: {
+        predictions: true,
       },
       skip: time % 24,
       take: 3 * 24 - (time % 24),

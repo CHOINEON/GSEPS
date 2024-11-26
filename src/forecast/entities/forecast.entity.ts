@@ -36,10 +36,16 @@ export class ForecastModel {
   @Column()
   weatherImg: string;
 
-  @CreateDateColumn({ precision: 0 })
+  @CreateDateColumn({
+    type: 'timestamp',
+    precision: 0,
+  })
   createdAt: Date;
 
-  @UpdateDateColumn({ precision: 0 })
+  @UpdateDateColumn({
+    type: 'timestamp',
+    precision: 0,
+  })
   updatedAt: Date;
 
   @OneToMany(() => PredictionModel, (prediction) => prediction.forecastData)

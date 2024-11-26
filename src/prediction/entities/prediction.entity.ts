@@ -6,7 +6,9 @@ export class PredictionModel {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({
+    type: 'timestamp',
+  })
   time: Date;
 
   @Column()

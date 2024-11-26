@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { CommonModule } from './common/common.module';
 import { ForecastModel } from './forecast/entities/forecast.entity';
 import { ForecastModule } from './forecast/forecast.module';
+import { PredictionModel } from './prediction/entities/prediction.entity';
 import { PredictionModule } from './prediction/prediction.module';
 import { SeedModule } from './seed/seed.module';
 
@@ -23,7 +24,7 @@ import { SeedModule } from './seed/seed.module';
       username: 'postgres',
       password: 'postgres',
       database: 'postgres',
-      entities: [ForecastModel],
+      entities: [ForecastModel, PredictionModel],
       synchronize: true,
     }),
     SeedModule,
