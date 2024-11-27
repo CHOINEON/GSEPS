@@ -1,15 +1,11 @@
-import React from "react";
-import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
-import { Menu, Layout } from "antd";
-const { Header } = Layout;
+
+import { Menu } from "antd";
 
 const HeaderMenu = () => {
   const navigate = useNavigate();
   return (
     <Menu
-      // theme="dark"
       style={{ justifyContent: "center" }}
       mode="horizontal"
       defaultSelectedKeys={["1"]}

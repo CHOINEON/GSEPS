@@ -27,7 +27,7 @@ const Sidebar = () => {
         items={[
           {
             key: "1",
-            // icon: <UserOutlined />,
+
             label: "GT1",
           },
           {

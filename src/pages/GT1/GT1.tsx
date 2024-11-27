@@ -1,4 +1,4 @@
-import { Checkbox, DatePicker, message, Table } from "antd";
+import { Checkbox, DatePicker, message, Table, Card } from "antd";
 import Title from "antd/es/typography/Title";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import PredictionChart from "../../components/PredictionChart";
 import DateTime from "../../features/Layout/components/DateTime";
 import { getSelectedForecast } from "../../features/api/PredictionApi";
-
+import styled from "styled-components";
 interface Forecast {
   time: string;
   temperature: number;
@@ -238,13 +238,32 @@ const GT1: React.FC = () => {
   return (
     <div>
       <DateTime />
-      <Title level={3} style={{ margin: 0, marginTop: 10, marginLeft: 5 }}>
-        예측 시간
+      <Title
+        level={4}
+        style={{
+          margin: 0,
+          marginTop: 5,
+          marginLeft: 5,
+          textAlign: "center",
+        }}
+      >
+        예측 시간대 설정
       </Title>
-
-      <div style={{ maxWidth: 600, margin: "20px" }}>
-        <div style={{ marginBottom: 16 }}>
-          <div>조회 날짜</div>
+      {/* <Card
+        bodyStyle={{ padding: 0 }}
+        style={{ margin: 10, width: "45%", justifyContent: "center" }}
+      > */}
+      <div
+        style={{
+          margin: 10,
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <div style={{ marginBottom: 10, marginRight: 10 }}>
+          <Title level={5} style={{ textAlign: "center" }}>
+            조회 시점{" "}
+          </Title>
           <DatePicker
             value={scopeDate}
             onChange={handleScopeDateChange}
@@ -252,8 +271,10 @@ const GT1: React.FC = () => {
           />
         </div>
 
-        <div style={{ marginBottom: 16 }}>
-          <div>예측 날짜</div>
+        <div style={{ marginBottom: 10, marginRight: 10 }}>
+          <Title level={5} style={{ textAlign: "center" }}>
+            예측 시점
+          </Title>
           <DatePicker
             value={predictionDate}
             onChange={(date) => date && setPredictionDate(date)}
@@ -262,7 +283,9 @@ const GT1: React.FC = () => {
         </div>
 
         <div>
-          <div>예측 시간 (최대 4개)</div>
+          <Title level={5} style={{ textAlign: "center" }}>
+            예측 시간 (최대 4개)
+          </Title>
           <Checkbox.Group
             options={timeOptions}
             value={predictionTimes}
@@ -270,9 +293,12 @@ const GT1: React.FC = () => {
           />
         </div>
       </div>
+      {/* </Card> */}
+      <Title level={3} style={{ margin: 0, marginTop: 5, marginLeft: 10 }}>
+        예측 차트
+      </Title>
 
-      {/* 차트 컨포넌트 */}
-      <div style={{ margin: "20px" }}>
+      <div style={{ margin: "0px 20px" }}>
         {selectedForecast && predictionTimes.length > 0 && (
           <PredictionChart
             selectedForecast={selectedForecast}
@@ -282,10 +308,12 @@ const GT1: React.FC = () => {
           />
         )}
       </div>
-
+      <Title level={3} style={{ margin: 0, marginTop: 10, marginLeft: 10 }}>
+        용량 테이블
+      </Title>
       <div style={{ margin: "20px" }}>
         <Table
-          title={() => "거래시간"}
+          // title={() => "거래시간"}
           columns={columns}
           dataSource={restructureData()}
           pagination={false}
@@ -315,3 +343,9 @@ const GT1: React.FC = () => {
 };
 
 export default GT1;
+
+const FlexRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  // justify-content: space-around;
+`;
