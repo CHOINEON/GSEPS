@@ -24,7 +24,7 @@ const DateTime: React.FC = () => {
         level={3}
         style={{ margin: 0, marginTop: 5, marginRight: 10, marginLeft: 5 }}
       >
-        날짜 및 시간
+        현재시간 :{" "}
       </Title>
       <Title level={3} style={{ margin: 0, marginTop: 5 }}>
         {Today}
@@ -39,5 +39,5 @@ const DateTime: React.FC = () => {
 export default DateTime;
 const Flex = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 `;
