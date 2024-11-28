@@ -1,4 +1,4 @@
-import { Checkbox, DatePicker, message, Table, Card } from "antd";
+import { Checkbox, DatePicker, message, Table } from "antd";
 import Title from "antd/es/typography/Title";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
@@ -6,14 +6,13 @@ import { useEffect, useState } from "react";
 import PredictionChart from "../../components/PredictionChart";
 import DateTime from "../../features/Layout/components/DateTime";
 import { getSelectedForecast } from "../../features/api/PredictionApi";
-import styled from "styled-components";
-interface Forecast {
-  time: string;
-  temperature: number;
-  pressureMb: number;
-  humidity: number;
-  weatherImg: string;
-}
+// interface Forecast {
+//   time: string;
+//   temperature: number;
+//   pressureMb: number;
+//   humidity: number;
+//   weatherImg: string;
+// }
 
 const GT1: React.FC = () => {
   const [selectedForecast, setSelectedForecast] = useState<any>(null);
@@ -245,8 +244,7 @@ const GT1: React.FC = () => {
           marginTop: 5,
           marginLeft: 5,
           textAlign: "center",
-        }}
-      >
+        }}>
         예측 시간대 설정
       </Title>
       {/* <Card
@@ -258,8 +256,7 @@ const GT1: React.FC = () => {
           margin: 10,
           display: "flex",
           justifyContent: "center",
-        }}
-      >
+        }}>
         <div style={{ marginBottom: 10, marginRight: 10 }}>
           <Title level={5} style={{ textAlign: "center" }}>
             조회 시점{" "}
@@ -344,8 +341,8 @@ const GT1: React.FC = () => {
 
 export default GT1;
 
-const FlexRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  // justify-content: space-around;
-`;
+// const FlexRow = styled.div`
+//   display: flex;
+//   flex-direction: row;
+//   // justify-content: space-around;
+// `;

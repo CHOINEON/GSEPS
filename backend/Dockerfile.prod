@@ -1,0 +1,34 @@
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# 패키지 설치
+COPY package*.json yarn.lock ./
+RUN yarn install
+# 소스 코드 복사
+COPY . .
+
+# 타임존 설정
+ENV TZ=Asia/Seoul
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# 빌드
+RUN yarn build
+
+# 프로덕션 환경 설정
+ENV NODE_ENV=production
+
+# 런타임 환경
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+COPY package*.json yarn.lock ./
+RUN yarn install --only=production
+
+COPY --from=builder /app/dist ./dist
+
+EXPOSE 20000
+
+# 빌드된 앱 실행
+CMD ["yarn", "start:prod"]

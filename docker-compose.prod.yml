@@ -1,0 +1,75 @@
+# version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      TZ: Asia/Seoul
+      PGTZ: Asia/Seoul
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  ai:
+    build:
+      context: ./AI
+      dockerfile: Dockerfile.prod
+    ports:
+      - "8888:8888"
+    environment:
+      - PYTHONUNBUFFERED=1
+    networks:
+      - app_network
+    restart: always
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "20000:20000"
+    environment:
+      - NODE_ENV=production
+      - PYTHON_SERVER_URL=http://ai:8888
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${POSTGRES_PASSWORD}
+      - DB_DATABASE=${POSTGRES_DB}
+      - WEATHER_API_KEY=${WEATHER_API_KEY}
+    networks:
+      - app_network
+    depends_on:
+      - postgres
+      - ai
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "80:80"
+    environment:
+      - VITE_API_URL=${BACKEND_SERVER_URL} # 웹상에서 요청하니까 백엔드 IP or DNS 주소 넣어줌(컨테이너 이름 X)
+    networks:
+      - app_network
+    depends_on:
+      - backend
+    restart: always
+
+networks:
+  app_network:
+    driver: bridge
+# volumes:
+#   postgres_data:
