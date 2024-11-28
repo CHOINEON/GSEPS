@@ -1,0 +1,436 @@
+{
+  "predictions": [
+    {
+      "id": 23,
+      "GT1": 288,
+      "GT2": 278,
+      "ST": 312,
+      "Total": 878,
+      "lower_limit": 873.61,
+      "upper_limit": 882.39
+    },
+    {
+      "id": 26,
+      "GT1": 298,
+      "GT2": 273,
+      "ST": 326,
+      "Total": 897,
+      "lower_limit": 892.51,
+      "upper_limit": 901.48
+    },
+    {
+      "id": 25,
+      "GT1": 279,
+      "GT2": 299,
+      "ST": 318,
+      "Total": 896,
+      "lower_limit": 891.52,
+      "upper_limit": 900.48
+    },
+    {
+      "id": 28,
+      "GT1": 298,
+      "GT2": 291,
+      "ST": 357,
+      "Total": 946,
+      "lower_limit": 941.27,
+      "upper_limit": 950.73
+    },
+    {
+      "id": 30,
+      "GT1": 272,
+      "GT2": 292,
+      "ST": 324,
+      "Total": 888,
+      "lower_limit": 883.56,
+      "upper_limit": 892.44
+    },
+    {
+      "id": 36,
+      "GT1": 292,
+      "GT2": 275,
+      "ST": 319,
+      "Total": 886,
+      "lower_limit": 881.57,
+      "upper_limit": 890.43
+    },
+    {
+      "id": 37,
+      "GT1": 271,
+      "GT2": 285,
+      "ST": 313,
+      "Total": 869,
+      "lower_limit": 864.65,
+      "upper_limit": 873.34
+    },
+    {
+      "id": 32,
+      "GT1": 288,
+      "GT2": 282,
+      "ST": 329,
+      "Total": 899,
+      "lower_limit": 894.5,
+      "upper_limit": 903.49
+    },
+    {
+      "id": 33,
+      "GT1": 284,
+      "GT2": 274,
+      "ST": 341,
+      "Total": 899,
+      "lower_limit": 894.5,
+      "upper_limit": 903.49
+    },
+    {
+      "id": 34,
+      "GT1": 276,
+      "GT2": 288,
+      "ST": 355,
+      "Total": 919,
+      "lower_limit": 914.4,
+      "upper_limit": 923.59
+    },
+    {
+      "id": 31,
+      "GT1": 294,
+      "GT2": 290,
+      "ST": 315,
+      "Total": 899,
+      "lower_limit": 894.5,
+      "upper_limit": 903.49
+    },
+    {
+      "id": 40,
+      "GT1": 285,
+      "GT2": 292,
+      "ST": 311,
+      "Total": 888,
+      "lower_limit": 883.56,
+      "upper_limit": 892.44
+    },
+    {
+      "id": 29,
+      "GT1": 277,
+      "GT2": 288,
+      "ST": 326,
+      "Total": 891,
+      "lower_limit": 886.54,
+      "upper_limit": 895.45
+    },
+    {
+      "id": 35,
+      "GT1": 294,
+      "GT2": 289,
+      "ST": 347,
+      "Total": 930,
+      "lower_limit": 925.35,
+      "upper_limit": 934.65
+    },
+    {
+      "id": 39,
+      "GT1": 277,
+      "GT2": 293,
+      "ST": 350,
+      "Total": 920,
+      "lower_limit": 915.4,
+      "upper_limit": 924.6
+    },
+    {
+      "id": 38,
+      "GT1": 292,
+      "GT2": 299,
+      "ST": 351,
+      "Total": 942,
+      "lower_limit": 937.29,
+      "upper_limit": 946.71
+    },
+    {
+      "id": 41,
+      "GT1": 292,
+      "GT2": 300,
+      "ST": 336,
+      "Total": 928,
+      "lower_limit": 923.36,
+      "upper_limit": 932.64
+    },
+    {
+      "id": 44,
+      "GT1": 294,
+      "GT2": 299,
+      "ST": 318,
+      "Total": 911,
+      "lower_limit": 906.45,
+      "upper_limit": 915.55
+    },
+    {
+      "id": 42,
+      "GT1": 278,
+      "GT2": 299,
+      "ST": 331,
+      "Total": 908,
+      "lower_limit": 903.46,
+      "upper_limit": 912.54
+    },
+    {
+      "id": 43,
+      "GT1": 279,
+      "GT2": 284,
+      "ST": 342,
+      "Total": 905,
+      "lower_limit": 900.48,
+      "upper_limit": 909.52
+    },
+    {
+      "id": 45,
+      "GT1": 285,
+      "GT2": 277,
+      "ST": 355,
+      "Total": 917,
+      "lower_limit": 912.41,
+      "upper_limit": 921.58
+    },
+    {
+      "id": 46,
+      "GT1": 286,
+      "GT2": 272,
+      "ST": 311,
+      "Total": 869,
+      "lower_limit": 864.65,
+      "upper_limit": 873.34
+    },
+    {
+      "id": 49,
+      "GT1": 290,
+      "GT2": 283,
+      "ST": 360,
+      "Total": 933,
+      "lower_limit": 928.34,
+      "upper_limit": 937.66
+    },
+    {
+      "id": 48,
+      "GT1": 294,
+      "GT2": 297,
+      "ST": 326,
+      "Total": 917,
+      "lower_limit": 912.41,
+      "upper_limit": 921.58
+    },
+    {
+      "id": 47,
+      "GT1": 281,
+      "GT2": 298,
+      "ST": 350,
+      "Total": 929,
+      "lower_limit": 924.36,
+      "upper_limit": 933.64
+    },
+    {
+      "id": 51,
+      "GT1": 291,
+      "GT2": 281,
+      "ST": 312,
+      "Total": 884,
+      "lower_limit": 879.58,
+      "upper_limit": 888.42
+    },
+    {
+      "id": 52,
+      "GT1": 280,
+      "GT2": 299,
+      "ST": 320,
+      "Total": 899,
+      "lower_limit": 894.5,
+      "upper_limit": 903.49
+    },
+    {
+      "id": 50,
+      "GT1": 298,
+      "GT2": 272,
+      "ST": 324,
+      "Total": 894,
+      "lower_limit": 889.53,
+      "upper_limit": 898.47
+    },
+    {
+      "id": 54,
+      "GT1": 288,
+      "GT2": 288,
+      "ST": 354,
+      "Total": 930,
+      "lower_limit": 925.35,
+      "upper_limit": 934.65
+    },
+    {
+      "id": 53,
+      "GT1": 280,
+      "GT2": 283,
+      "ST": 341,
+      "Total": 904,
+      "lower_limit": 899.48,
+      "upper_limit": 908.52
+    },
+    {
+      "id": 55,
+      "GT1": 286,
+      "GT2": 288,
+      "ST": 358,
+      "Total": 932,
+      "lower_limit": 927.34,
+      "upper_limit": 936.66
+    },
+    {
+      "id": 57,
+      "GT1": 282,
+      "GT2": 275,
+      "ST": 351,
+      "Total": 908,
+      "lower_limit": 903.46,
+      "upper_limit": 912.54
+    },
+    {
+      "id": 61,
+      "GT1": 290,
+      "GT2": 291,
+      "ST": 353,
+      "Total": 934,
+      "lower_limit": 929.33,
+      "upper_limit": 938.67
+    },
+    {
+      "id": 56,
+      "GT1": 299,
+      "GT2": 270,
+      "ST": 350,
+      "Total": 919,
+      "lower_limit": 914.4,
+      "upper_limit": 923.59
+    },
+    {
+      "id": 60,
+      "GT1": 281,
+      "GT2": 292,
+      "ST": 320,
+      "Total": 893,
+      "lower_limit": 888.53,
+      "upper_limit": 897.46
+    },
+    {
+      "id": 59,
+      "GT1": 293,
+      "GT2": 294,
+      "ST": 347,
+      "Total": 934,
+      "lower_limit": 929.33,
+      "upper_limit": 938.67
+    },
+    {
+      "id": 58,
+      "GT1": 289,
+      "GT2": 298,
+      "ST": 338,
+      "Total": 925,
+      "lower_limit": 920.38,
+      "upper_limit": 929.62
+    },
+    {
+      "id": 64,
+      "GT1": 295,
+      "GT2": 300,
+      "ST": 340,
+      "Total": 935,
+      "lower_limit": 930.33,
+      "upper_limit": 939.67
+    },
+    {
+      "id": 63,
+      "GT1": 299,
+      "GT2": 287,
+      "ST": 311,
+      "Total": 897,
+      "lower_limit": 892.51,
+      "upper_limit": 901.48
+    },
+    {
+      "id": 65,
+      "GT1": 280,
+      "GT2": 274,
+      "ST": 348,
+      "Total": 902,
+      "lower_limit": 897.49,
+      "upper_limit": 906.51
+    },
+    {
+      "id": 62,
+      "GT1": 297,
+      "GT2": 288,
+      "ST": 326,
+      "Total": 911,
+      "lower_limit": 906.45,
+      "upper_limit": 915.55
+    },
+    {
+      "id": 66,
+      "GT1": 279,
+      "GT2": 287,
+      "ST": 359,
+      "Total": 925,
+      "lower_limit": 920.38,
+      "upper_limit": 929.62
+    },
+    {
+      "id": 67,
+      "GT1": 270,
+      "GT2": 297,
+      "ST": 316,
+      "Total": 883,
+      "lower_limit": 878.59,
+      "upper_limit": 887.41
+    },
+    {
+      "id": 68,
+      "GT1": 295,
+      "GT2": 278,
+      "ST": 337,
+      "Total": 910,
+      "lower_limit": 905.45,
+      "upper_limit": 914.55
+    },
+    {
+      "id": 70,
+      "GT1": 300,
+      "GT2": 280,
+      "ST": 339,
+      "Total": 919,
+      "lower_limit": 914.4,
+      "upper_limit": 923.59
+    },
+    {
+      "id": 69,
+      "GT1": 276,
+      "GT2": 275,
+      "ST": 329,
+      "Total": 880,
+      "lower_limit": 875.6,
+      "upper_limit": 884.4
+    },
+    {
+      "id": 71,
+      "GT1": 295,
+      "GT2": 274,
+      "ST": 341,
+      "Total": 910,
+      "lower_limit": 905.45,
+      "upper_limit": 914.55
+    },
+    {
+      "id": 72,
+      "GT1": 285,
+      "GT2": 291,
+      "ST": 330,
+      "Total": 906,
+      "lower_limit": 901.47,
+      "upper_limit": 910.53
+    }
+  ]
+}
