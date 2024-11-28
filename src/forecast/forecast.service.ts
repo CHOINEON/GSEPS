@@ -36,6 +36,59 @@ export class ForecastService {
     });
   }
 
+  async getSelectedForecast(
+    scopeDate: Date,
+    predictionDate: Date,
+    predictionTimes: number[],
+  ) {
+    // 보고있는 날짜의 24시간 예보 데이터를 가져옴
+    const forecasts = await this.forecastRepository.find({
+      where: {
+        forecastDate: MoreThanOrEqual(scopeDate),
+      },
+      order: {
+        forecastDate: 'ASC',
+      },
+      relations: {
+        predictions: true,
+      },
+      take: 24,
+    });
+
+    // forecast 데이터 배열 생성
+    const forecastArray = forecasts.map((forecast) => ({
+      time: forecast.forecastDate.toISOString(),
+      temperature: forecast.temperature,
+      pressureMb: forecast.pressureMb,
+      humidity: forecast.humidity,
+      weatherImg: forecast.weatherImg,
+    }));
+
+    // predictions를 시간별로 그룹화
+    const predictionsGroups = {};
+    predictionTimes.forEach((time) => {
+      const timeStr = new Date(
+        predictionDate.setHours(time, 0, 0, 0),
+      ).toISOString();
+      predictionsGroups[time] = forecasts.map((forecast) => {
+        const prediction = forecast.predictions.find(
+          (p) => p.time.toISOString() === timeStr,
+        );
+
+        return {
+          GT1: prediction?.GT1 ?? null,
+          GT2: prediction?.GT2 ?? null,
+          ST: prediction?.ST ?? null,
+        };
+      });
+    });
+
+    return {
+      forecasts: forecastArray,
+      predictions: predictionsGroups,
+    };
+  }
+
   async upsertForecast() {
     // GSEPS 좌표
     const lat = 36.9570520946909;
