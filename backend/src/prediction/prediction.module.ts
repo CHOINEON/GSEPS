@@ -12,6 +12,7 @@ import { PredictionService } from './prediction.service';
     CommonModule,
     ForecastModule,
   ],
+  exports: [PredictionService],
   controllers: [PredictionController],
   providers: [PredictionService],
 })

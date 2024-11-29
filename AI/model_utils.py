@@ -41,5 +41,5 @@ def test_predict(model: Any | None, data: Any | pd.DataFrame):
             "lower_limit": round(lower_limit, 2),
             "upper_limit": round(upper_limit, 2)
         })
-        print(data)
+        # print(data)
     return results
