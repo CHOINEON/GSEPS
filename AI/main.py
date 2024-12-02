@@ -11,6 +11,10 @@ app = FastAPI()
 # MODEL_FILE_PATH = 'path/to/your/model.dill'
 # model = load_model(MODEL_FILE_PATH)
 
+@app.get("/")
+async def root():
+    return {"health": "ok"}
+
 @app.post("/predict")
 async def predict_endpoint(request: List[Dict[str, Any]]):
     # 모든 요청 데이터를 한 번에 DataFrame으로 변환

@@ -38,21 +38,33 @@ export class PredictionService {
 
     if (existingPredictions.length > 0) {
       // 모든 데이터가 이미 존재하면 업데이트
-      return await Promise.all(
-        predictions.map(async (pred) => {
-          const existingPrediction = existingPredictions.find(
-            (ep) => ep.forecastData.id === pred.id,
-          );
+      const updatesAndInserts = predictions.map((pred) => {
+        const existingPrediction = existingPredictions.find(
+          (ep) => ep.forecastData.id === pred.id,
+        );
 
-          return await this.predictionRepository.save(
+        if (existingPrediction) {
+          // 기존 데이터가 있으면 업데이트
+          return this.predictionRepository.save(
             this.predictionRepository.merge(existingPrediction, {
               GT1: pred.GT1,
               GT2: pred.GT2,
               ST: pred.ST,
             }),
           );
-        }),
-      );
+        } else {
+          // 기존 데이터가 없으면 새로 생성
+          return this.predictionRepository.save({
+            time: targetDate,
+            GT1: pred.GT1,
+            GT2: pred.GT2,
+            ST: pred.ST,
+            forecastData: { id: pred.id },
+          });
+        }
+      });
+
+      return await Promise.all(updatesAndInserts);
     } else {
       // 하나라도 없으면 모두 새로 생성
       return await Promise.all(
