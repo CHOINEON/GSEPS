@@ -7,7 +7,8 @@ import { PredictionService } from 'src/prediction/prediction.service';
 @Injectable()
 export class SeedService {
   private readonly logger = new Logger(SeedService.name);
-  private readonly predictionTimes = [0, 3, 6, 9, 12, 15, 18, 21];
+  // private readonly predictionTimes = [0, 3, 6, 9, 12, 15, 18, 21];
+  private readonly predictionTimes = [0];
 
   constructor(
     private forecastService: ForecastService,
@@ -41,7 +42,7 @@ export class SeedService {
       const currentHour = new Date().getHours();
       this.logger.log(`${currentHour}시 예측 시작`);
       try {
-        await this.predictionService.upsertPrediction(currentHour);
+        await this.predictionService.setPredictions(currentHour);
         this.logger.log(`${currentHour}시 예측 완료`);
       } catch (error) {
         this.logger.error(`${currentHour}시 예측 실패:`, error);
@@ -57,7 +58,7 @@ export class SeedService {
       this.logger.log('초기 예측 데이터 업데이트 시작');
       try {
         for (const time of this.predictionTimes) {
-          await this.predictionService.upsertPrediction(time);
+          await this.predictionService.setPredictions(time);
           this.logger.log(`${time}시 예측 데이터 업데이트 완료`);
         }
         this.logger.log('초기 예측 데이터 업데이트 완료');

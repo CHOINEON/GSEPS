@@ -1,7 +1,7 @@
 from typing import Any, Dict, List
 from fastapi import FastAPI
 from concurrent.futures import ProcessPoolExecutor
-from model_utils import load_model, parallel_predict, test_predict
+from model_utils import ModelLoader, parallel_predict, test_predict2
 from data_models import PredictionRequest
 import pandas as pd
 
@@ -24,10 +24,10 @@ async def predict_endpoint(request: List[Dict[str, Any]]):
     # 단일 DataFrame에 대해 예측 수행
     with ProcessPoolExecutor() as executor:
         # 단일 DataFrame에 대해 test_predict 실행
-        results = test_predict(None, df)
+        results = test_predict2(None, df)
     
     # 결과 반환
-    return {"predictions": results}
+    return results.pop()
 
 if __name__ == "__main__":
     import uvicorn
