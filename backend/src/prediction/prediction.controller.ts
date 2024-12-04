@@ -7,7 +7,7 @@ export class PredictionController {
 
   @Get()
   async upsertPrediction(@Query('time', ParseIntPipe) time: number) {
-    const result = await this.predictionService.upsertPrediction(time);
+    const result = await this.predictionService.setPredictions(time);
     return result;
   }
 }

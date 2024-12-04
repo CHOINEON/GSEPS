@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CommonModule } from './common/common.module';
@@ -10,7 +11,6 @@ import { ForecastModule } from './forecast/forecast.module';
 import { PredictionModel } from './prediction/entities/prediction.entity';
 import { PredictionModule } from './prediction/prediction.module';
 import { SeedModule } from './seed/seed.module';
-
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -26,6 +26,7 @@ import { SeedModule } from './seed/seed.module';
       database: process.env.DB_DATABASE,
       entities: [ForecastModel, PredictionModel],
       synchronize: true,
+      namingStrategy: new SnakeNamingStrategy() as any,
     }),
     SeedModule,
     ForecastModule,

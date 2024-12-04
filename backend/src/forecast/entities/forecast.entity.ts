@@ -1,22 +1,13 @@
+import { BaseModel } from 'src/common/entity/base.entity';
 import { PredictionModel } from 'src/prediction/entities/prediction.entity';
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, VersionColumn } from 'typeorm';
 
 @Entity({
   orderBy: {
     forecastDate: 'ASC',
   },
 })
-export class ForecastModel {
-  @PrimaryGeneratedColumn()
-  id: number;
-
+export class ForecastModel extends BaseModel {
   @Column({
     type: 'timestamp',
     unique: true,
@@ -36,18 +27,10 @@ export class ForecastModel {
   @Column()
   weatherImg: string;
 
-  @CreateDateColumn({
-    type: 'timestamp',
-    precision: 0,
-  })
-  createdAt: Date;
+  @VersionColumn()
+  version: number;
 
-  @UpdateDateColumn({
-    type: 'timestamp',
-    precision: 0,
-  })
-  updatedAt: Date;
-
-  @OneToMany(() => PredictionModel, (prediction) => prediction.forecastData)
+  @ManyToMany(() => PredictionModel, (prediction) => prediction.forecastData)
+  @JoinTable()
   predictions: PredictionModel[];
 }
