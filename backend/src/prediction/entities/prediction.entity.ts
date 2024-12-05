@@ -1,6 +1,6 @@
-import { BaseModel } from 'src/common/entity/base.entity';
-import { ForecastModel } from 'src/forecast/entities/forecast.entity';
 import { Column, Entity, ManyToMany } from 'typeorm';
+import { BaseModel } from '../../common/entity/base.entity';
+import { ForecastModel } from '../../forecast/entities/forecast.entity';
 
 @Entity()
 export class PredictionModel extends BaseModel {

@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron, SchedulerRegistry } from '@nestjs/schedule';
-import { ForecastService } from 'src/forecast/forecast.service';
-import { PredictionService } from 'src/prediction/prediction.service';
+import { ForecastService } from '../forecast/forecast.service';
+import { PredictionService } from '../prediction/prediction.service';
 
 @Injectable()
 export class SeedService {
@@ -23,7 +23,7 @@ export class SeedService {
     timeZone: 'Asia/Seoul',
   })
   async scheduleUpsertForecast() {
-    this.logger.log('날씨 데이터 업데이트 시작');
+    this.logger.debug('날씨 데이터 업데이트 시작');
     try {
       await this.forecastService.upsertForecast();
       this.logger.log('날씨 데이터 업데이트 완료');
@@ -40,7 +40,7 @@ export class SeedService {
   async schedulePredictions() {
     if (this.configService.get('NODE_ENV') === 'development') {
       const currentHour = new Date().getHours();
-      this.logger.log(`${currentHour}시 예측 시작`);
+      this.logger.debug(`${currentHour}시 예측 시작`);
       try {
         await this.predictionService.setPredictions(currentHour);
         this.logger.log(`${currentHour}시 예측 완료`);
@@ -55,21 +55,20 @@ export class SeedService {
     await this.forecastService.upsertForecast();
 
     if (this.configService.get('NODE_ENV') === 'development') {
-      this.logger.log('초기 예측 데이터 업데이트 시작');
+      this.logger.debug('초기 예측 데이터 업데이트 시작');
       try {
         for (const time of this.predictionTimes) {
           await this.predictionService.setPredictions(time);
-          this.logger.log(`${time}시 예측 데이터 업데이트 완료`);
+          this.logger.debug(`${time}시 예측 데이터 업데이트 완료`);
         }
-        this.logger.log('초기 예측 데이터 업데이트 완료');
       } catch (error) {
         this.logger.error('초기 예측 데이터 업데이트 실패:', error);
       }
     }
 
     const job = this.schedulerRegistry.getCronJob('weatherUpdate');
-    this.logger.log(`다음 날씨 업데이트 시간: ${job.nextDate()}`);
+    this.logger.log(`다음 예보 업데이트 : ${job.nextDate()}`);
     const job2 = this.schedulerRegistry.getCronJob('predictions');
-    this.logger.log(`다음 예측 시간: ${job2.nextDate()}`);
+    this.logger.log(`다음 예측 시간 : ${job2.nextDate()}`);
   }
 }

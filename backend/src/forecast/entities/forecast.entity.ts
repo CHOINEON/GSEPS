@@ -1,6 +1,6 @@
-import { BaseModel } from 'src/common/entity/base.entity';
-import { PredictionModel } from 'src/prediction/entities/prediction.entity';
 import { Column, Entity, JoinTable, ManyToMany, VersionColumn } from 'typeorm';
+import { BaseModel } from '../../common/entity/base.entity';
+import { PredictionModel } from '../../prediction/entities/prediction.entity';
 
 @Entity({
   orderBy: {

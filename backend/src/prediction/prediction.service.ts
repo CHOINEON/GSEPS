@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CommonService } from 'src/common/common.service';
-import { ForecastService } from 'src/forecast/forecast.service';
 import { Repository } from 'typeorm';
+import { CommonService } from '../common/common.service';
+import { ForecastService } from '../forecast/forecast.service';
 import { PredictionModel } from './entities/prediction.entity';
 import { PredictType } from './types/predict.type';
 
@@ -31,6 +31,58 @@ export class PredictionService {
       savedPredictions,
       forecastData,
     );
+  }
+
+  async getDailyPredictionTable(scopeDate: Date) {
+    const startDate = new Date(scopeDate);
+    const endDate = new Date(scopeDate);
+    endDate.setDate(endDate.getDate() + 1);
+    console.log('startDate', startDate);
+    console.log('endDate', endDate);
+
+    const predictions = await this.predictionRepository
+      .createQueryBuilder('prediction')
+      .where('prediction.time >= :startDate', { startDate })
+      .andWhere('prediction.time < :endDate', { endDate })
+      .orderBy('prediction.time', 'DESC')
+      .getMany();
+
+    // 온도별로 그룹화
+    const groupedPredictions = predictions.reduce((acc, curr) => {
+      const temp = curr.predictTemperature;
+      if (!acc[temp]) {
+        acc[temp] = {
+          temperature: temp,
+          predictions: [],
+        };
+      }
+      acc[temp].predictions.push({
+        predictionId: curr.id,
+        GT1: curr.GT1,
+        GT2: curr.GT2,
+        ST: curr.ST,
+        predictedAt: curr.time.toISOString(),
+      });
+      return acc;
+    }, {});
+
+    // 각 온도 그룹을 최신순으로 정렬하고 latest와 historical로 분리
+    const predictionGroups = Object.values(groupedPredictions)
+      .map((group: any) => ({
+        temperature: group.temperature,
+        latest: group.predictions[0],
+        historical: group.predictions.slice(1),
+      }))
+      .sort((a, b) => a.temperature - b.temperature); // 온도 내림차순 정렬
+
+    // 날짜도 KST 기준으로 변환
+    const kstOffset = 9 * 60 * 60 * 1000;
+    const kstDate = new Date(startDate.getTime() + kstOffset);
+
+    return {
+      date: kstDate.toISOString().split('T')[0],
+      predictions: predictionGroups,
+    };
   }
 
   private async _getRecentTestData() {

@@ -14,8 +14,6 @@ export class ParseDatePipe implements PipeTransform<string, Date> {
     }
 
     const date = new Date(value);
-    console.log(value);
-    console.log(date);
 
     if (isNaN(date.getTime())) {
       throw new BadRequestException('올바른 날짜 형식이 아닙니다');
@@ -24,7 +22,6 @@ export class ParseDatePipe implements PipeTransform<string, Date> {
     // UTC 시간을 KST로 변환 (UTC+9)
     const kstOffset = 9 * 60 * 60 * 1000; // 9시간을 밀리초로 변환
     const kstDate = new Date(date.getTime() + kstOffset);
-    console.log(kstDate);
 
     // 시간을 00:00:00으로 설정
     kstDate.setHours(0, 0, 0, 0);

@@ -57,6 +57,7 @@ export class ForecastService {
 
     // forecast 데이터 배열 생성
     const forecastArray = forecasts.map((forecast) => ({
+      forecastId: forecast.id,
       time: forecast.forecastDate.toISOString(),
       temperature: forecast.temperature,
       pressureMb: forecast.pressureMb,
@@ -76,6 +77,7 @@ export class ForecastService {
         );
 
         return {
+          predictionId: prediction?.id,
           GT1: prediction?.GT1 ?? null,
           GT2: prediction?.GT2 ?? null,
           ST: prediction?.ST ?? null,
@@ -145,7 +147,8 @@ export class ForecastService {
         });
       }
       throw new Error(
-        '날씨 데이터를 가져오는데 실패했습니다: ' + error.message,
+        '날씨 데이터를 가져오는데 실패했습니다: ' +
+          (error instanceof Error ? error.message : '알 수 없는 오류'),
       );
     }
   }
