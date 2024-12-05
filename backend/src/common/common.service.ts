@@ -9,6 +9,7 @@ export class CommonService {
   }
 
   async getPredictData(forecastData: any[]): Promise<AIPredictResultType> {
-    return await this.getPythonServerAPI().post('/predict', forecastData);
+    const res = await this.getPythonServerAPI().post('/predict', forecastData);
+    return res.data;
   }
 }

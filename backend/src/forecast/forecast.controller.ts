@@ -1,6 +1,9 @@
 import { Controller, Get, ParseIntPipe, Query } from '@nestjs/common';
+import {
+  ParseDatePipe,
+  ParseNumberArrayPipe,
+} from '../common/pipes/parse-date.pipe';
 import { ForecastService } from './forecast.service';
-import { ParseDatePipe, ParseNumberArrayPipe } from './pipes/parse-date.pipe';
 
 @Controller('forecast')
 export class ForecastController {

@@ -5,5 +5,10 @@
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
-  }
+  },
+  "moduleDirectories": ["node_modules", "<rootDir>/../"],
+  "moduleNameMapper": {
+    "^typeorm$": "<rootDir>/../node_modules/typeorm"
+  },
+  "testRunner": "jest-jasmine2"
 }
