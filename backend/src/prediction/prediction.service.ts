@@ -37,8 +37,6 @@ export class PredictionService {
     const startDate = new Date(scopeDate);
     const endDate = new Date(scopeDate);
     endDate.setDate(endDate.getDate() + 1);
-    console.log('startDate', startDate);
-    console.log('endDate', endDate);
 
     const predictions = await this.predictionRepository
       .createQueryBuilder('prediction')
