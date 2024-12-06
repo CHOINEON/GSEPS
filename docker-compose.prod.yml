@@ -21,6 +21,7 @@ services:
     restart: always
 
   ai:
+    image: ${DOCKERHUB_USERNAME}/app-ai:${IMAGE_TAG}
     build:
       context: ./AI
       dockerfile: Dockerfile.prod
@@ -33,6 +34,7 @@ services:
     restart: always
 
   backend:
+    image: ${DOCKERHUB_USERNAME}/app-backend:${IMAGE_TAG}
     build:
       context: ./backend
       dockerfile: Dockerfile.prod
@@ -55,6 +57,7 @@ services:
     restart: always
 
   frontend:
+    image: ${DOCKERHUB_USERNAME}/app-frontend:${IMAGE_TAG}
     build:
       context: ./frontend
       dockerfile: Dockerfile.prod
