@@ -32,6 +32,7 @@ services:
       - "8888:8888"
     environment:
       - PYTHONUNBUFFERED=1
+      - TZ=Asia/Seoul
     networks:
       - app_network
 
@@ -45,6 +46,7 @@ services:
     ports:
       - "20000:20000"
     environment:
+      - TZ=Asia/Seoul
       - NODE_ENV=development
       - PYTHON_SERVER_URL=http://ai:8888
       - DB_HOST=postgres # DB 컨테이너 이름
@@ -70,6 +72,7 @@ services:
       - "5173:5173"
     environment:
       - VITE_API_URL=${BACKEND_SERVER_URL} # 웹상에서 요청하니까 백엔드 IP or DNS 주소 넣어줌
+      - TZ=Asia/Seoul
     networks:
       - app_network
     depends_on:
