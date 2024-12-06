@@ -9,6 +9,9 @@ RUN npm install
 
 # 소스 코드 복사 및 빌드
 COPY . .
+# 환경 변수 설정
+ENV VITE_API_URL=/api
+
 RUN npm run build
 
 # 런타임 환경

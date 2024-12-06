@@ -43,7 +43,6 @@ const GT1: React.FC = () => {
         formattedTimes
       );
 
-      console.log(data);
       setSelectedForecast(data);
     } catch (error) {
       console.error("Error fetching forecast:", error);
