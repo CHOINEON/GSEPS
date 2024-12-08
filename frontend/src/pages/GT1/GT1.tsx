@@ -1,3 +1,4 @@
+import React from "react";
 import { Checkbox, DatePicker, message, Table } from "antd";
 import Title from "antd/es/typography/Title";
 import type { Dayjs } from "dayjs";
@@ -19,6 +20,7 @@ const GT1: React.FC = () => {
   const [scopeDate, setScopeDate] = useState<Dayjs>(dayjs());
   const [predictionDate, setPredictionDate] = useState<Dayjs>(dayjs());
   const [predictionTimes, setPredictionTimes] = useState<number[]>([]);
+  const [selectedCells, setSelectedCells] = useState<string[]>([]);
 
   const timeOptions = [
     { label: "0시", value: 0 },
@@ -167,6 +169,30 @@ const GT1: React.FC = () => {
     ];
   };
 
+  const handleCellClick = (
+    time: string,
+    predictionTime: string,
+    value: number
+  ) => {
+    if (value === 0 || !value) return;
+
+    const cellId = `${predictionTime}_${time}`;
+
+    setSelectedCells((prev) => {
+      // 이미 선택된 셀을 클릭한 경우 제거
+      if (prev.includes(cellId)) {
+        return prev.filter((id) => id !== cellId);
+      }
+      // 새로운 셀 선택 시, 최대 2개까지만 유지
+      const newSelection = [...prev, cellId];
+      return newSelection.slice(-2);
+    });
+
+    console.log(
+      `Clicked: Prediction Time ${predictionTime}, Hour ${time}, Value ${value}`
+    );
+  };
+
   const columns = [
     {
       title: "",
@@ -182,10 +208,25 @@ const GT1: React.FC = () => {
       width: 80,
       align: "center" as const,
       render: (value: any, record: any) => {
-        // 예상용량 행에서만 특별한 스타일 적용
         if (record.key.startsWith("prediction_")) {
+          const predictionTime = record.key.split("_")[1];
           return (
-            <div className={value === 0 ? "disabled-cell" : ""}>{value}</div>
+            <div
+              className={`
+                ${value === 0 ? "disabled-cell" : "clickable-cell"}
+                ${
+                  selectedCells.includes(`${predictionTime}_${i}`)
+                    ? "selected-cell"
+                    : ""
+                }
+              `}
+              onClick={() =>
+                value !== 0 &&
+                handleCellClick(i.toString(), predictionTime, value)
+              }
+            >
+              {value}
+            </div>
           );
         }
         return value;
@@ -243,7 +284,8 @@ const GT1: React.FC = () => {
           marginTop: 5,
           marginLeft: 5,
           textAlign: "center",
-        }}>
+        }}
+      >
         예측 시간대 설정
       </Title>
       {/* <Card
@@ -255,7 +297,8 @@ const GT1: React.FC = () => {
           margin: 10,
           display: "flex",
           justifyContent: "center",
-        }}>
+        }}
+      >
         <div style={{ marginBottom: 10, marginRight: 10 }}>
           <Title level={5} style={{ textAlign: "center" }}>
             조회 시점{" "}
@@ -331,6 +374,19 @@ const GT1: React.FC = () => {
             background-color: #f5f5f5;
             padding: 4px 8px;
             border-radius: 2px;
+          }
+          .clickable-cell {
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 2px;
+            transition: background-color 0.3s;
+          }
+          .clickable-cell:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+          }
+          .selected-cell {
+            background-color: rgba(24, 144, 255, 0.1);
+            border: 1px solid #1890ff;
           }
         `}
       </style>
