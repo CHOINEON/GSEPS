@@ -1,24 +1,24 @@
 # version: "3.8"
 
 services:
-  postgres:
-    image: postgres:15
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_DB: ${POSTGRES_DB}
-      TZ: Asia/Seoul
-      PGTZ: Asia/Seoul
-    volumes:
-      - ./postgres_data:/var/lib/postgresql/data
-    networks:
-      - app_network
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-    restart: always
+  # postgres:
+  #   image: postgres:15
+  #   environment:
+  #     POSTGRES_USER: ${POSTGRES_USER}
+  #     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  #     POSTGRES_DB: ${POSTGRES_DB}
+  #     TZ: Asia/Seoul
+  #     PGTZ: Asia/Seoul
+  #   volumes:
+  #     - ./postgres_data:/var/lib/postgresql/data
+  #   networks:
+  #     - app_network
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U postgres"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   restart: always
 
   ai:
     image: ${DOCKERHUB_USERNAME}/app-ai:${IMAGE_TAG}
@@ -45,7 +45,7 @@ services:
       - TZ=Asia/Seoul
       - NODE_ENV=production
       - PYTHON_SERVER_URL=http://ai:8888
-      - DB_HOST=postgres
+      - DB_HOST=${POSTGRES_HOST}
       - DB_PORT=5432
       - DB_USER=${POSTGRES_USER}
       - DB_PASSWORD=${POSTGRES_PASSWORD}
@@ -54,7 +54,7 @@ services:
     networks:
       - app_network
     depends_on:
-      - postgres
+      # - postgres
       - ai
     restart: always
 

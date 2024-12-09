@@ -29,6 +29,7 @@ jobs:
 
           # Backend 환경변수
           echo "NODE_ENV=production" >> .env
+          echo "DB_HOST=${{ secrets.POSTGRES_HOST }}" >> .env
           echo "DB_PORT=5432" >> .env
           echo "DB_USER=${{ secrets.POSTGRES_USER }}" >> .env
           echo "DB_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .env
@@ -102,7 +103,8 @@ jobs:
             # sudo docker-compose -f docker-compose.prod.yml pull
             # sudo docker-compose -f docker-compose.prod.yml up -d
 
-            sudo -E POSTGRES_USER=${{ secrets.POSTGRES_USER }} \
+            sudo -E POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} \
+              POSTGRES_USER=${{ secrets.POSTGRES_USER }} \
               POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} \
               POSTGRES_DB=${{ secrets.POSTGRES_DB }} \
               WEATHER_API_KEY=${{ secrets.WEATHER_API_KEY }} \
@@ -113,7 +115,8 @@ jobs:
 
             sudo docker system prune -af
 
-            sudo -E POSTGRES_USER=${{ secrets.POSTGRES_USER }} \
+            sudo -E POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} \
+              POSTGRES_USER=${{ secrets.POSTGRES_USER }} \
               POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} \
               POSTGRES_DB=${{ secrets.POSTGRES_DB }} \
               WEATHER_API_KEY=${{ secrets.WEATHER_API_KEY }} \
