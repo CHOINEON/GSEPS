@@ -10,6 +10,8 @@ async function bootstrap() {
         : ['error', 'warn', 'log', 'debug'],
   });
 
+  app.setGlobalPrefix('api');
+
   // CORS 설정 추가
   app.enableCors({
     origin: true,
