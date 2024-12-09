@@ -178,8 +178,14 @@ const GT1: React.FC = () => {
       if (prev.includes(cellId)) {
         return prev.filter((id) => id !== cellId);
       }
-      // 새로운 셀 선택 시, 최대 2개까지만 유지
-      const newSelection = [...prev, cellId];
+
+      // 같은 예측 시간대(행)의 기존 선택을 제거하고 새로운 선택 추가
+      const filteredSelection = prev.filter(
+        (id) => !id.startsWith(`${predictionTime}_`)
+      );
+      const newSelection = [...filteredSelection, cellId];
+
+      // 최대 2개까지만 유지
       return newSelection.slice(-2);
     });
 
