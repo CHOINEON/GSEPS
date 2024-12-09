@@ -7,8 +7,7 @@ import { PredictionService } from '../prediction/prediction.service';
 @Injectable()
 export class SeedService {
   private readonly logger = new Logger(SeedService.name);
-  // private readonly predictionTimes = [0, 3, 6, 9, 12, 15, 18, 21];
-  private readonly predictionTimes = [0];
+  private readonly predictionTimes = [0, 3, 6, 9, 12, 15, 18, 21];
 
   constructor(
     private forecastService: ForecastService,
@@ -38,7 +37,7 @@ export class SeedService {
     timeZone: 'Asia/Seoul',
   })
   async schedulePredictions() {
-    if (this.configService.get('NODE_ENV') === 'development') {
+    if (this.configService.get('NODE_ENV') === 'production') {
       const currentHour = new Date().getHours();
       this.logger.debug(`${currentHour}시 예측 시작`);
       try {
