@@ -1,4 +1,5 @@
-import { Checkbox, DatePicker, message, Table } from "antd";
+import React from "react";
+import { Checkbox, DatePicker, message, Table, Button } from "antd";
 import Title from "antd/es/typography/Title";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
@@ -6,19 +7,13 @@ import { useEffect, useState } from "react";
 import PredictionChart from "../../components/PredictionChart";
 import DateTime from "../../features/Layout/components/DateTime";
 import { getSelectedForecast } from "../../features/api/PredictionApi";
-// interface Forecast {
-//   time: string;
-//   temperature: number;
-//   pressureMb: number;
-//   humidity: number;
-//   weatherImg: string;
-// }
 
 const GT1: React.FC = () => {
   const [selectedForecast, setSelectedForecast] = useState<any>(null);
   const [scopeDate, setScopeDate] = useState<Dayjs>(dayjs());
   const [predictionDate, setPredictionDate] = useState<Dayjs>(dayjs());
   const [predictionTimes, setPredictionTimes] = useState<number[]>([]);
+  const [selectedCells, setSelectedCells] = useState<string[]>([]);
 
   const timeOptions = [
     { label: "0시", value: 0 },
@@ -63,10 +58,11 @@ const GT1: React.FC = () => {
   };
 
   const formatHour = (time: string) => dayjs(time).format("H");
+  //이후 여러 시간 값에서 H시간 값만 추출하는데 쓰임.
 
   const getPredictionSum = (predictions: any) => {
     return predictions
-      ? predictions.GT1 + predictions.GT2 + predictions.ST
+      ? Number((predictions.GT1 + predictions.GT2 + predictions.ST).toFixed(2))
       : null;
   };
 
@@ -150,6 +146,7 @@ const GT1: React.FC = () => {
         (acc: any, _: any, forecastIndex: number) => {
           const predictions =
             selectedForecast.predictions[time]?.[forecastIndex];
+          // 특정 시간을 가져온 후 그 값을 시간값(0-23)으로 변환
           acc[formatHour(selectedForecast.forecasts[forecastIndex].time)] =
             predictions ? getPredictionSum(predictions) : null;
           return acc;
@@ -167,6 +164,36 @@ const GT1: React.FC = () => {
     ];
   };
 
+  const handleCellClick = (
+    time: string,
+    predictionTime: string,
+    value: number
+  ) => {
+    if (value === 0 || !value) return;
+
+    const cellId = `${predictionTime}_${time}`;
+
+    setSelectedCells((prev) => {
+      // 이미 선택된 셀을 클릭한 경우 제거
+      if (prev.includes(cellId)) {
+        return prev.filter((id) => id !== cellId);
+      }
+
+      // 같은 예측 시간대(행)의 기존 선택을 제거하고 새로운 선택 추가
+      const filteredSelection = prev.filter(
+        (id) => !id.startsWith(`${predictionTime}_`)
+      );
+      const newSelection = [...filteredSelection, cellId];
+
+      // 최대 2개까지만 유지
+      return newSelection.slice(-2);
+    });
+
+    console.log(
+      `Clicked: Prediction Time ${predictionTime}, Hour ${time}, Value ${value}`
+    );
+  };
+
   const columns = [
     {
       title: "",
@@ -182,10 +209,25 @@ const GT1: React.FC = () => {
       width: 80,
       align: "center" as const,
       render: (value: any, record: any) => {
-        // 예상용량 행에서만 특별한 스타일 적용
         if (record.key.startsWith("prediction_")) {
+          const predictionTime = record.key.split("_")[1];
           return (
-            <div className={value === 0 ? "disabled-cell" : ""}>{value}</div>
+            <div
+              className={`
+                ${value === 0 ? "disabled-cell" : "clickable-cell"}
+                ${
+                  selectedCells.includes(`${predictionTime}_${i}`)
+                    ? "selected-cell"
+                    : ""
+                }
+              `}
+              onClick={() =>
+                value !== 0 &&
+                handleCellClick(i.toString(), predictionTime, value)
+              }
+            >
+              {value}
+            </div>
           );
         }
         return value;
@@ -243,19 +285,18 @@ const GT1: React.FC = () => {
           marginTop: 5,
           marginLeft: 5,
           textAlign: "center",
-        }}>
+        }}
+      >
         예측 시간대 설정
       </Title>
-      {/* <Card
-        bodyStyle={{ padding: 0 }}
-        style={{ margin: 10, width: "45%", justifyContent: "center" }}
-      > */}
+
       <div
         style={{
           margin: 10,
           display: "flex",
           justifyContent: "center",
-        }}>
+        }}
+      >
         <div style={{ marginBottom: 10, marginRight: 10 }}>
           <Title level={5} style={{ textAlign: "center" }}>
             조회 시점{" "}
@@ -289,7 +330,7 @@ const GT1: React.FC = () => {
           />
         </div>
       </div>
-      {/* </Card> */}
+
       <Title level={3} style={{ margin: 0, marginTop: 5, marginLeft: 10 }}>
         예측 차트
       </Title>
@@ -304,12 +345,17 @@ const GT1: React.FC = () => {
           />
         )}
       </div>
-      <Title level={3} style={{ margin: 0, marginTop: 10, marginLeft: 10 }}>
+      <Button
+        type="primary"
+        style={{ margin: 10, backgroundColor: "black", width: "100px" }}
+      >
+        비교
+      </Button>
+      <Title level={3} style={{ margin: 0, marginLeft: 10 }}>
         용량 테이블
       </Title>
       <div style={{ margin: "20px" }}>
         <Table
-          // title={() => "거래시간"}
           columns={columns}
           dataSource={restructureData()}
           pagination={false}
@@ -331,6 +377,19 @@ const GT1: React.FC = () => {
             background-color: #f5f5f5;
             padding: 4px 8px;
             border-radius: 2px;
+          }
+          .clickable-cell {
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 2px;
+            transition: background-color 0.3s;
+          }
+          .clickable-cell:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+          }
+          .selected-cell {
+            background-color: rgba(24, 144, 255, 0.1);
+            border: 1px solid #1890ff;
           }
         `}
       </style>
