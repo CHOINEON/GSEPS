@@ -10,6 +10,8 @@ async function bootstrap() {
         : ['error', 'warn', 'log', 'debug'],
   });
 
+  app.setGlobalPrefix('api');
+
   // CORS 설정 추가
   app.enableCors({
     origin: true,
@@ -25,7 +27,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document); // /docs 경로로 접근 가능
+  SwaggerModule.setup('/api/docs', app, document); // /docs 경로로 접근 가능
 
   await app.listen(20000, '0.0.0.0');
 }
