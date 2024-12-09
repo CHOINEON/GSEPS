@@ -1,5 +1,5 @@
 import React from "react";
-import { Checkbox, DatePicker, message, Table } from "antd";
+import { Checkbox, DatePicker, message, Table, Button } from "antd";
 import Title from "antd/es/typography/Title";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
@@ -7,13 +7,6 @@ import { useEffect, useState } from "react";
 import PredictionChart from "../../components/PredictionChart";
 import DateTime from "../../features/Layout/components/DateTime";
 import { getSelectedForecast } from "../../features/api/PredictionApi";
-// interface Forecast {
-//   time: string;
-//   temperature: number;
-//   pressureMb: number;
-//   humidity: number;
-//   weatherImg: string;
-// }
 
 const GT1: React.FC = () => {
   const [selectedForecast, setSelectedForecast] = useState<any>(null);
@@ -290,10 +283,7 @@ const GT1: React.FC = () => {
       >
         예측 시간대 설정
       </Title>
-      {/* <Card
-        bodyStyle={{ padding: 0 }}
-        style={{ margin: 10, width: "45%", justifyContent: "center" }}
-      > */}
+
       <div
         style={{
           margin: 10,
@@ -334,7 +324,7 @@ const GT1: React.FC = () => {
           />
         </div>
       </div>
-      {/* </Card> */}
+
       <Title level={3} style={{ margin: 0, marginTop: 5, marginLeft: 10 }}>
         예측 차트
       </Title>
@@ -349,12 +339,17 @@ const GT1: React.FC = () => {
           />
         )}
       </div>
-      <Title level={3} style={{ margin: 0, marginTop: 10, marginLeft: 10 }}>
+      <Button
+        type="primary"
+        style={{ margin: 10, backgroundColor: "black", width: "100px" }}
+      >
+        비교
+      </Button>
+      <Title level={3} style={{ margin: 0, marginLeft: 10 }}>
         용량 테이블
       </Title>
       <div style={{ margin: "20px" }}>
         <Table
-          // title={() => "거래시간"}
           columns={columns}
           dataSource={restructureData()}
           pagination={false}
