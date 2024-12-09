@@ -65,10 +65,11 @@ const GT1: React.FC = () => {
   };
 
   const formatHour = (time: string) => dayjs(time).format("H");
+  //이후 여러 시간 값에서 H시간 값만 추출하는데 쓰임.
 
   const getPredictionSum = (predictions: any) => {
     return predictions
-      ? predictions.GT1 + predictions.GT2 + predictions.ST
+      ? Number((predictions.GT1 + predictions.GT2 + predictions.ST).toFixed(2))
       : null;
   };
 
@@ -152,6 +153,7 @@ const GT1: React.FC = () => {
         (acc: any, _: any, forecastIndex: number) => {
           const predictions =
             selectedForecast.predictions[time]?.[forecastIndex];
+          // 특정 시간을 가져온 후 그 값을 시간값(0-23)으로 변환
           acc[formatHour(selectedForecast.forecasts[forecastIndex].time)] =
             predictions ? getPredictionSum(predictions) : null;
           return acc;
