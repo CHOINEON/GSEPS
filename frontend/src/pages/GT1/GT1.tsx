@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import PredictionChart from "../../components/PredictionChart";
 import DateTime from "../../features/Layout/components/DateTime";
 import { getSelectedForecast } from "../../features/api/PredictionApi";
-import PredictionTable from "../../components/PredictionTable/PredictionTable";
+import PredictionTable from "../../components/PredictionTable/Table";
 
 const GT1: React.FC = () => {
   const [selectedForecast, setSelectedForecast] = useState<any>(null);

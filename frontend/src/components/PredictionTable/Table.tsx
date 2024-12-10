@@ -1,37 +1,14 @@
 import React from "react";
 import { Table } from "antd";
-
-interface Forecast {
-  forecastId: number;
-  time: string;
-  weatherImg: string;
-  temperature: number;
-  humidity: number;
-  pressureMb: number;
-}
-interface Predictions {
-  [key: string]: {
-    // 시간대별 예측
-    [key: number]: number[]; // 각 시간대의 예측값 배열
-  };
-}
-
-interface SelectedForecast {
-  forecasts: Forecast[];
-  predictions: Predictions;
-}
-interface PredictionTableProps {
-  selectedForecast: SelectedForecast;
-  predictionTimes: number[];
-  selectedCells: string[];
-  handleCellClick: (
-    time: string,
-    predictionTime: string,
-    value: number
-  ) => void;
-  formatHour: (time: string) => string;
-  getPredictionSum: (predictions: number[]) => number | null;
-}
+import {
+  Forecast,
+  PredictionTableProps,
+  WeatherAccumulator,
+  TemperatureRow,
+  HumidityRow,
+  PressureRow,
+  PredictionRow,
+} from "../../types/table.types";
 
 const PredictionTable: React.FC<PredictionTableProps> = ({
   selectedForecast,
@@ -60,47 +37,60 @@ const PredictionTable: React.FC<PredictionTableProps> = ({
     const weatherRow = {
       key: "weather",
       label: "날씨",
-      ...selectedForecast.forecasts.reduce((acc: any, forecast: any) => {
-        acc[formatHour(forecast.time)] = (
-          <img
-            src={`https://${forecast.weatherImg}`}
-            alt="weather"
-            style={{ width: 32 }}
-          />
-        );
-        return acc;
-      }, {}),
+      ...selectedForecast.forecasts.reduce(
+        (acc: WeatherAccumulator, forecast: Forecast) => {
+          acc[formatHour(forecast.time)] = (
+            <img
+              src={`https://${forecast.weatherImg}`}
+              alt="weather"
+              style={{ width: 32 }}
+            />
+          );
+          return acc;
+        },
+        {} as WeatherAccumulator
+      ),
     };
 
     const temperatureRow = {
       key: "temperature",
       label: "온도(°C)",
-      ...selectedForecast.forecasts.reduce((acc: any, forecast: any) => {
-        acc[formatHour(forecast.time)] = forecast.temperature;
-        return acc;
-      }, {}),
+      ...selectedForecast.forecasts.reduce(
+        (acc: Omit<TemperatureRow, "key" | "label">, forecast: Forecast) => {
+          acc[formatHour(forecast.time)] = forecast.temperature;
+          return acc;
+        },
+        {} as Omit<TemperatureRow, "key" | "label">
+      ),
     };
 
     const humidityRow = {
       key: "humidity",
       label: "습도(%)",
-      ...selectedForecast.forecasts.reduce((acc: any, forecast: any) => {
-        acc[formatHour(forecast.time)] = forecast.humidity;
-        return acc;
-      }, {}),
+      ...selectedForecast.forecasts.reduce(
+        (acc: Omit<HumidityRow, "key" | "label">, forecast: Forecast) => {
+          acc[formatHour(forecast.time)] = forecast.humidity;
+          return acc;
+        },
+        {} as Omit<HumidityRow, "key" | "label">
+      ),
     };
 
     const pressureRow = {
       key: "pressure",
       label: "기압(mb)",
-      ...selectedForecast.forecasts.reduce((acc: any, forecast: any) => {
-        acc[formatHour(forecast.time)] = forecast.pressureMb;
-        return acc;
-      }, {}),
+      ...selectedForecast.forecasts.reduce(
+        (acc: Omit<PressureRow, "key" | "label">, forecast: Forecast) => {
+          acc[formatHour(forecast.time)] = forecast.pressureMb;
+          return acc;
+        },
+        {} as Omit<PressureRow, "key" | "label">
+      ),
     };
 
     const sortedPredictionTimes = [...predictionTimes].sort((a, b) => a - b);
 
+    //예측 행 생성
     const predictionRows = sortedPredictionTimes.map((time, index) => ({
       key: `prediction_${time}`,
       label: `예상용량 ${time}시`,
@@ -111,14 +101,18 @@ const PredictionTable: React.FC<PredictionTableProps> = ({
         ),
       },
       ...selectedForecast.forecasts.reduce(
-        (acc: any, _: any, forecastIndex: number) => {
+        (
+          acc: Omit<PredictionRow, "key" | "label" | "style">,
+          _,
+          forecastIndex: number
+        ) => {
           const predictions =
             selectedForecast.predictions[time]?.[forecastIndex];
           acc[formatHour(selectedForecast.forecasts[forecastIndex].time)] =
             predictions ? getPredictionSum(predictions) : null;
           return acc;
         },
-        {}
+        {} as Omit<PredictionRow, "key" | "label" | "style">
       ),
     }));
 
