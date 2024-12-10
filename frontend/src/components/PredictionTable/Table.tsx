@@ -1,8 +1,27 @@
 import React from "react";
 import { Table } from "antd";
 
+interface Forecast {
+  forecastId: number;
+  time: string;
+  weatherImg: string;
+  temperature: number;
+  humidity: number;
+  pressureMb: number;
+}
+interface Predictions {
+  [key: string]: {
+    // 시간대별 예측
+    [key: number]: number[]; // 각 시간대의 예측값 배열
+  };
+}
+
+interface SelectedForecast {
+  forecasts: Forecast[];
+  predictions: Predictions;
+}
 interface PredictionTableProps {
-  selectedForecast: any;
+  selectedForecast: SelectedForecast;
   predictionTimes: number[];
   selectedCells: string[];
   handleCellClick: (
@@ -11,7 +30,7 @@ interface PredictionTableProps {
     value: number
   ) => void;
   formatHour: (time: string) => string;
-  getPredictionSum: (predictions: any) => number | null;
+  getPredictionSum: (predictions: number[]) => number | null;
 }
 
 const PredictionTable: React.FC<PredictionTableProps> = ({
@@ -22,6 +41,18 @@ const PredictionTable: React.FC<PredictionTableProps> = ({
   formatHour,
   getPredictionSum,
 }) => {
+  //--------------------------------
+  //들어오는 데이터 type 확인용 콘솔로그
+  console.log("전체 Selected Forecast 객체:", selectedForecast);
+  console.log("Selected Forecast의 키들:", Object.keys(selectedForecast || {}));
+  console.log(
+    "Selected Forecast ID:",
+    typeof selectedForecast?.forecasts[1]?.time
+  );
+  console.log("Prediction Times:", predictionTimes);
+  console.log("Selected Cells:", selectedCells);
+  //---------------------------------
+
   const restructureData = () => {
     if (!selectedForecast?.forecasts || !selectedForecast?.predictions)
       return [];
