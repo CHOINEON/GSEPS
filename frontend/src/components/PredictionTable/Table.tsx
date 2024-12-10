@@ -1,5 +1,5 @@
-import React from "react";
-import { Table } from "antd";
+import React, { useState } from "react";
+import { Table, Modal, Button } from "antd";
 import {
   Forecast,
   PredictionTableProps,
@@ -29,6 +29,25 @@ const PredictionTable: React.FC<PredictionTableProps> = ({
   console.log("Prediction Times:", predictionTimes);
   console.log("Selected Cells:", selectedCells);
   //---------------------------------
+
+  // 모달 상태 관리
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // 선택된 셀들의 데이터를 가져오는 함수
+  const getSelectedCellsData = () => {
+    return selectedCells.map((cellId) => {
+      const [predictionTime, hour] = cellId.split("_");
+      return {
+        predictionTime,
+        hour,
+        value: selectedForecast.predictions[predictionTime]?.[parseInt(hour)]
+          ? getPredictionSum(
+              selectedForecast.predictions[predictionTime][parseInt(hour)]
+            )
+          : null,
+      };
+    });
+  };
 
   const restructureData = () => {
     if (!selectedForecast?.forecasts || !selectedForecast?.predictions)
@@ -193,6 +212,36 @@ const PredictionTable: React.FC<PredictionTableProps> = ({
         rowClassName={getRowClassName}
         className="prediction-table"
       />
+      <Button
+        onClick={() => setIsModalOpen(true)}
+        disabled={selectedCells.length !== 2}
+        type="primary"
+        style={{
+          margin: "10px 5px 5px 0px",
+          padding: "5px 15px",
+          backgroundColor: selectedCells.length === 2 ? "black" : "#d9d9d9",
+          color: "white",
+          border: "none",
+          borderRadius: "4px",
+          cursor: selectedCells.length === 2 ? "pointer" : "not-allowed",
+        }}
+      >
+        비교하기
+      </Button>
+
+      <Modal
+        title="예측 결과 비교"
+        open={isModalOpen}
+        onOk={() => setIsModalOpen(false)}
+        onCancel={() => setIsModalOpen(false)}
+        width={1500}
+        style={{ top: 20, height: "90vh" }}
+        bodyStyle={{
+          height: "calc(90vh - 110px)", // 모달 헤더/푸터 고려한 높이
+          overflow: "auto", // 내용이 넘칠 경우 스크롤
+        }}
+      ></Modal>
+
       <style>
         {`
           .prediction-row-0 td { background-color: #ffe6e6 !important; }

@@ -197,12 +197,12 @@ const GT1: React.FC = () => {
           />
         )}
       </div>
-      <Button
+      {/* <Button
         type="primary"
         style={{ margin: 10, backgroundColor: "black", width: "100px" }}
       >
         비교
-      </Button>
+      </Button> */}
       <Title level={3} style={{ margin: 0, marginLeft: 10 }}>
         용량 테이블
       </Title>
