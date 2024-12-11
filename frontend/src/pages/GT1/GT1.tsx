@@ -1,13 +1,12 @@
-import React from "react";
-import { Checkbox, DatePicker, message, Button } from "antd";
+import { Checkbox, DatePicker, message } from "antd";
 import Title from "antd/es/typography/Title";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import PredictionChart from "../../components/PredictionChart";
+import PredictionTable from "../../components/PredictionTable/Table";
 import DateTime from "../../features/Layout/components/DateTime";
 import { getSelectedForecast } from "../../features/api/PredictionApi";
-import PredictionTable from "../../components/PredictionTable/Table";
 
 const GT1: React.FC = () => {
   const [selectedForecast, setSelectedForecast] = useState<any>(null);
@@ -137,8 +136,7 @@ const GT1: React.FC = () => {
           marginTop: 5,
           marginLeft: 5,
           textAlign: "center",
-        }}
-      >
+        }}>
         예측 시간대 설정
       </Title>
 
@@ -147,8 +145,7 @@ const GT1: React.FC = () => {
           margin: 10,
           display: "flex",
           justifyContent: "center",
-        }}
-      >
+        }}>
         <div style={{ marginBottom: 10, marginRight: 10 }}>
           <Title level={5} style={{ textAlign: "center" }}>
             조회 시점{" "}

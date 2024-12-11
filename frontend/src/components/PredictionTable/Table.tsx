@@ -1,13 +1,14 @@
+import { Button, Modal, Table } from "antd";
 import React, { useState } from "react";
-import { Table, Modal, Button } from "antd";
+import logger from "../../shared/logger";
 import {
   Forecast,
-  PredictionTableProps,
-  WeatherAccumulator,
-  TemperatureRow,
   HumidityRow,
-  PressureRow,
   PredictionRow,
+  PredictionTableProps,
+  PressureRow,
+  TemperatureRow,
+  WeatherAccumulator,
 } from "../../types/table.types";
 
 const PredictionTable: React.FC<PredictionTableProps> = ({
@@ -20,34 +21,34 @@ const PredictionTable: React.FC<PredictionTableProps> = ({
 }) => {
   //--------------------------------
   //들어오는 데이터 type 확인용 콘솔로그
-  console.log("전체 Selected Forecast 객체:", selectedForecast);
-  console.log("Selected Forecast의 키들:", Object.keys(selectedForecast || {}));
-  console.log(
+  logger.log("전체 Selected Forecast 객체:", selectedForecast);
+  logger.log("Selected Forecast의 키들:", Object.keys(selectedForecast || {}));
+  logger.log(
     "Selected Forecast ID:",
     typeof selectedForecast?.forecasts[1]?.time
   );
-  console.log("Prediction Times:", predictionTimes);
-  console.log("Selected Cells:", selectedCells);
+  logger.log("Prediction Times:", predictionTimes);
+  logger.log("Selected Cells:", selectedCells);
   //---------------------------------
 
   // 모달 상태 관리
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // 선택된 셀들의 데이터를 가져오는 함수
-  const getSelectedCellsData = () => {
-    return selectedCells.map((cellId) => {
-      const [predictionTime, hour] = cellId.split("_");
-      return {
-        predictionTime,
-        hour,
-        value: selectedForecast.predictions[predictionTime]?.[parseInt(hour)]
-          ? getPredictionSum(
-              selectedForecast.predictions[predictionTime][parseInt(hour)]
-            )
-          : null,
-      };
-    });
-  };
+  // const getSelectedCellsData = () => {
+  //   return selectedCells.map((cellId) => {
+  //     const [predictionTime, hour] = cellId.split("_");
+  //     return {
+  //       predictionTime,
+  //       hour,
+  //       value: selectedForecast.predictions[predictionTime]?.[parseInt(hour)]
+  //         ? getPredictionSum(
+  //             selectedForecast.predictions[predictionTime][parseInt(hour)]
+  //           )
+  //         : null,
+  //     };
+  //   });
+  // };
 
   const restructureData = () => {
     if (!selectedForecast?.forecasts || !selectedForecast?.predictions)
@@ -190,8 +191,7 @@ const PredictionTable: React.FC<PredictionTableProps> = ({
               onClick={() =>
                 value !== 0 &&
                 handleCellClick(i.toString(), predictionTime, value)
-              }
-            >
+              }>
               {value}
             </div>
           );
@@ -224,8 +224,7 @@ const PredictionTable: React.FC<PredictionTableProps> = ({
           border: "none",
           borderRadius: "4px",
           cursor: selectedCells.length === 2 ? "pointer" : "not-allowed",
-        }}
-      >
+        }}>
         비교하기
       </Button>
 
@@ -236,11 +235,12 @@ const PredictionTable: React.FC<PredictionTableProps> = ({
         onCancel={() => setIsModalOpen(false)}
         width={1500}
         style={{ top: 20, height: "90vh" }}
-        bodyStyle={{
-          height: "calc(90vh - 110px)", // 모달 헤더/푸터 고려한 높이
-          overflow: "auto", // 내용이 넘칠 경우 스크롤
-        }}
-      ></Modal>
+        styles={{
+          body: {
+            height: "calc(90vh - 110px)", // 모달 헤더/푸터 고려한 높이
+            overflow: "auto", // 내용이 넘칠 경우 스크롤
+          },
+        }}></Modal>
 
       <style>
         {`
