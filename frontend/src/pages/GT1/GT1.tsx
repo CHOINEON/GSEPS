@@ -1,5 +1,5 @@
 import React from "react";
-import { Checkbox, DatePicker, message, Table, Button } from "antd";
+import { Checkbox, DatePicker, message, Button } from "antd";
 import Title from "antd/es/typography/Title";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import PredictionChart from "../../components/PredictionChart";
 import DateTime from "../../features/Layout/components/DateTime";
 import { getSelectedForecast } from "../../features/api/PredictionApi";
+import PredictionTable from "../../components/PredictionTable/Table";
 
 const GT1: React.FC = () => {
   const [selectedForecast, setSelectedForecast] = useState<any>(null);
@@ -66,104 +67,6 @@ const GT1: React.FC = () => {
       : null;
   };
 
-  const getPastelColor = (index: number, totalTimes: number) => {
-    const colors = [
-      "#ffe6e6", // 파스텔 빨강
-      "#fff2e6", // 파스텔 주황
-      "#fffae6", // 파스텔 노랑
-      "#e6ffe6", // 파스텔 초록
-    ];
-
-    // 시간을 내림차순으로 정렬했을 때의 인덱스를 사용
-    const sortedIndex = totalTimes - 1 - index;
-    return colors[sortedIndex];
-  };
-
-  const restructureData = () => {
-    if (!selectedForecast?.forecasts || !selectedForecast?.predictions)
-      return [];
-
-    // 날씨 이미지 행
-    const weatherRow = {
-      key: "weather",
-      label: "날씨",
-      ...selectedForecast.forecasts.reduce((acc: any, forecast: any) => {
-        acc[formatHour(forecast.time)] = (
-          <img
-            src={`https://${forecast.weatherImg}`}
-            alt="weather"
-            style={{ width: 32 }}
-          />
-        );
-        return acc;
-      }, {}),
-    };
-
-    // 온도 행
-    const temperatureRow = {
-      key: "temperature",
-      label: "온도(°C)",
-      ...selectedForecast.forecasts.reduce((acc: any, forecast: any) => {
-        acc[formatHour(forecast.time)] = forecast.temperature;
-        return acc;
-      }, {}),
-    };
-
-    // 습도 행
-    const humidityRow = {
-      key: "humidity",
-      label: "습도(%)",
-      ...selectedForecast.forecasts.reduce((acc: any, forecast: any) => {
-        acc[formatHour(forecast.time)] = forecast.humidity;
-        return acc;
-      }, {}),
-    };
-
-    // 기압 행
-    const pressureRow = {
-      key: "pressure",
-      label: "기압(mb)",
-      ...selectedForecast.forecasts.reduce((acc: any, forecast: any) => {
-        acc[formatHour(forecast.time)] = forecast.pressureMb;
-        return acc;
-      }, {}),
-    };
-
-    // 예측 시간을 오름차순으로 정렬 (작은 시간 -> 큰 시간)
-    const sortedPredictionTimes = [...predictionTimes].sort((a, b) => a - b);
-
-    // 예측 시간별 행
-    const predictionRows = sortedPredictionTimes.map((time, index) => ({
-      key: `prediction_${time}`,
-      label: `예상용량 ${time}시`,
-      style: {
-        backgroundColor: getPastelColor(
-          sortedPredictionTimes.length - 1 - index,
-          sortedPredictionTimes.length
-        ),
-      },
-      ...selectedForecast.forecasts.reduce(
-        (acc: any, _: any, forecastIndex: number) => {
-          const predictions =
-            selectedForecast.predictions[time]?.[forecastIndex];
-          // 특정 시간을 가져온 후 그 값을 시간값(0-23)으로 변환
-          acc[formatHour(selectedForecast.forecasts[forecastIndex].time)] =
-            predictions ? getPredictionSum(predictions) : null;
-          return acc;
-        },
-        {}
-      ),
-    }));
-
-    return [
-      weatherRow,
-      temperatureRow,
-      humidityRow,
-      pressureRow,
-      ...predictionRows,
-    ];
-  };
-
   const handleCellClick = (
     time: string,
     predictionTime: string,
@@ -194,47 +97,6 @@ const GT1: React.FC = () => {
     );
   };
 
-  const columns = [
-    {
-      title: "",
-      dataIndex: "label",
-      key: "label",
-      fixed: "left" as const,
-      width: 120,
-    },
-    ...Array.from({ length: 24 }, (_, i) => ({
-      title: `${i + 1}`,
-      dataIndex: `${i}`,
-      key: `${i}`,
-      width: 80,
-      align: "center" as const,
-      render: (value: any, record: any) => {
-        if (record.key.startsWith("prediction_")) {
-          const predictionTime = record.key.split("_")[1];
-          return (
-            <div
-              className={`
-                ${value === 0 ? "disabled-cell" : "clickable-cell"}
-                ${
-                  selectedCells.includes(`${predictionTime}_${i}`)
-                    ? "selected-cell"
-                    : ""
-                }
-              `}
-              onClick={() =>
-                value !== 0 &&
-                handleCellClick(i.toString(), predictionTime, value)
-              }
-            >
-              {value}
-            </div>
-          );
-        }
-        return value;
-      },
-    })),
-  ];
-
   // 예측 날짜 선택 제한 함수 수정
   const disabledPredictionDate = (current: Dayjs | null) => {
     if (!current) return false;
@@ -263,16 +125,6 @@ const GT1: React.FC = () => {
     if (!current) return false;
     // 오늘로부터 2일 후까지만 선택 가능
     return current.isAfter(dayjs().add(2, "day"), "day");
-  };
-
-  const getRowClassName = (record: any) => {
-    if (record.key.startsWith("prediction_")) {
-      const timeIndex = predictionTimes
-        .sort((a, b) => b - a)
-        .indexOf(parseInt(record.key.split("_")[1]));
-      return `prediction-row-${timeIndex}`;
-    }
-    return "";
   };
 
   return (
@@ -345,62 +197,27 @@ const GT1: React.FC = () => {
           />
         )}
       </div>
-      <Button
+      {/* <Button
         type="primary"
         style={{ margin: 10, backgroundColor: "black", width: "100px" }}
       >
         비교
-      </Button>
+      </Button> */}
       <Title level={3} style={{ margin: 0, marginLeft: 10 }}>
         용량 테이블
       </Title>
       <div style={{ margin: "20px" }}>
-        <Table
-          columns={columns}
-          dataSource={restructureData()}
-          pagination={false}
-          scroll={{ x: "max-content" }}
-          bordered
-          rowClassName={getRowClassName}
-          className="prediction-table"
+        <PredictionTable
+          selectedForecast={selectedForecast}
+          predictionTimes={predictionTimes}
+          selectedCells={selectedCells}
+          handleCellClick={handleCellClick}
+          formatHour={formatHour}
+          getPredictionSum={getPredictionSum}
         />
       </div>
-
-      <style>
-        {`
-          .prediction-row-0 td { background-color: #ffe6e6 !important; }
-          .prediction-row-1 td { background-color: #fff2e6 !important; }
-          .prediction-row-2 td { background-color: #fffae6 !important; }
-          .prediction-row-3 td { background-color: #e6ffe6 !important; }
-          .disabled-cell {
-            color: #00000040;
-            background-color: #f5f5f5;
-            padding: 4px 8px;
-            border-radius: 2px;
-          }
-          .clickable-cell {
-            cursor: pointer;
-            padding: 4px 8px;
-            border-radius: 2px;
-            transition: background-color 0.3s;
-          }
-          .clickable-cell:hover {
-            background-color: rgba(0, 0, 0, 0.1);
-          }
-          .selected-cell {
-            background-color: rgba(24, 144, 255, 0.1);
-            border: 1px solid #1890ff;
-          }
-        `}
-      </style>
     </div>
   );
 };
 
 export default GT1;
-
-// const FlexRow = styled.div`
-//   display: flex;
-//   flex-direction: row;
-//   // justify-content: space-around;
-// `;
