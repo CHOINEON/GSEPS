@@ -1,16 +1,16 @@
 const logger = {
   log: (...args: unknown[]) => {
-    if (process.env.NODE_ENV === "development") {
+    if (import.meta.env.DEV) {
       console.log(...args);
     }
   },
   warn: (...args: unknown[]) => {
-    if (process.env.NODE_ENV === "development") {
+    if (import.meta.env.DEV) {
       console.warn(...args);
     }
   },
   error: (...args: unknown[]) => {
-    if (process.env.NODE_ENV === "development") {
+    if (import.meta.env.DEV) {
       console.error(...args);
     }
   },
