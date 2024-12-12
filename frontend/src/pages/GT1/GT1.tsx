@@ -7,6 +7,7 @@ import PredictionChart from "../../components/PredictionChart";
 import PredictionTable from "../../components/PredictionTable/Table";
 import DateTime from "../../features/Layout/components/DateTime";
 import { getSelectedForecast } from "../../features/api/PredictionApi";
+import logger from "../../shared/logger";
 
 const GT1: React.FC = () => {
   const [selectedForecast, setSelectedForecast] = useState<any>(null);
@@ -74,6 +75,9 @@ const GT1: React.FC = () => {
     if (value === 0 || !value) return;
 
     const cellId = `${predictionTime}_${time}`;
+    const predictionId =
+      selectedForecast?.predictions[predictionTime]?.[parseInt(time)]
+        ?.predictionId;
 
     setSelectedCells((prev) => {
       // 이미 선택된 셀을 클릭한 경우 제거
@@ -91,8 +95,8 @@ const GT1: React.FC = () => {
       return newSelection.slice(-2);
     });
 
-    console.log(
-      `Clicked: Prediction Time ${predictionTime}, Hour ${time}, Value ${value}`
+    logger.log(
+      `Clicked: Prediction Time ${predictionTime}, Hour ${time}, Value ${value}, Prediction ID ${predictionId}`
     );
   };
 
@@ -136,7 +140,8 @@ const GT1: React.FC = () => {
           marginTop: 5,
           marginLeft: 5,
           textAlign: "center",
-        }}>
+        }}
+      >
         예측 시간대 설정
       </Title>
 
@@ -145,7 +150,8 @@ const GT1: React.FC = () => {
           margin: 10,
           display: "flex",
           justifyContent: "center",
-        }}>
+        }}
+      >
         <div style={{ marginBottom: 10, marginRight: 10 }}>
           <Title level={5} style={{ textAlign: "center" }}>
             조회 시점{" "}
