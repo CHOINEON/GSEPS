@@ -1,6 +1,7 @@
 name: 프론트엔드 이미지 빌드 및 ECR 업로드
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - deploy
@@ -26,7 +27,7 @@ jobs:
 
       - name: Retag Existing Frontend Image if Latest Exists
         run: |
-          IMAGE_URI=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}/ineeji-frontend
+          IMAGE_URI=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}/ineeji-front
           if docker pull $IMAGE_URI:latest; then
             TIMESTAMP=$(date +%Y%m%d%H%M%S)
             docker tag $IMAGE_URI:latest $IMAGE_URI:$TIMESTAMP
@@ -35,9 +36,9 @@ jobs:
 
       - name: Build and Tag Frontend Docker Image
         run: |
-          docker build -t ${{ secrets.ECR_REPOSITORY }}/ineeji-frontend:latest -f frontend/Dockerfile.ecr .
-          docker tag ${{ secrets.ECR_REPOSITORY }}/ineeji-frontend:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}/ineeji-frontend:latest
+          docker build -t ${{ secrets.ECR_REPOSITORY }}/ineeji-front:latest -f frontend/Dockerfile.ecr ./frontend
+          docker tag ${{ secrets.ECR_REPOSITORY }}/ineeji-front:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}/ineeji-front:latest
 
       - name: Push Frontend Docker Image to Amazon ECR
         run: |
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}/ineeji-frontend:latest
+          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}/ineeji-front:latest

@@ -1,6 +1,7 @@
 name: AI 이미지 빌드 및 ECR 업로드
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - deploy
@@ -35,7 +36,7 @@ jobs:
 
       - name: Build and Tag AI Docker Image
         run: |
-          docker build -t ${{ secrets.ECR_REPOSITORY }}/ineeji-ai:latest -f AI/Dockerfile .
+          docker build -t ${{ secrets.ECR_REPOSITORY }}/ineeji-ai:latest -f AI/Dockerfile.prod ./AI
           docker tag ${{ secrets.ECR_REPOSITORY }}/ineeji-ai:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}/ineeji-ai:latest
 
       - name: Push AI Docker Image to Amazon ECR
