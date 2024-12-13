@@ -72,3 +72,5 @@ backend/postgres-data
 **/.Python
 **/pip-log.txt
 **/.python-version
+
+AI/models/
