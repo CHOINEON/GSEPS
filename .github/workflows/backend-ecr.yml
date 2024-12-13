@@ -25,13 +25,19 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Retag Existing Backend Image if Latest Exists
+      - name: Handle Existing Backend Image
         run: |
           IMAGE_URI=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}/ineeji-backend
-          if docker pull $IMAGE_URI:latest; then
+          if docker pull $IMAGE_URI:latest 2>/dev/null; then
+            # 기존 이미지를 새로운 타임스탬프 태그로 저장
             TIMESTAMP=$(date +%Y%m%d%H%M%S)
             docker tag $IMAGE_URI:latest $IMAGE_URI:$TIMESTAMP
             docker push $IMAGE_URI:$TIMESTAMP
+            
+            # latest 태그 삭제
+            aws ecr batch-delete-image \
+              --repository-name ${{ secrets.ECR_REPOSITORY }}/ineeji-backend \
+              --image-ids imageTag=latest
           fi
 
       - name: Build and Tag Backend Docker Image
