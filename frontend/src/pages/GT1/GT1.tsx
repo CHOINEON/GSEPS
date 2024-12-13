@@ -96,7 +96,9 @@ const GT1: React.FC = () => {
     });
 
     logger.log(
-      `Clicked: Prediction Time ${predictionTime}, Hour ${time}, Value ${value}, Prediction ID ${predictionId}`
+      `Clicked: Prediction Time ${predictionTime}, Hour ${time}, Value ${value}, Prediction ID ${predictionId}
+       - Scope Date: ${scopeDate.format("YYYY-MM-DD")}
+    - Prediction Date: ${predictionDate.format("YYYY-MM-DD")}`
     );
   };
 
