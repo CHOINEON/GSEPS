@@ -123,8 +123,8 @@ class ModelLoader:
             version_info (Dict): 버전 정보
         """
         version_file = os.path.join(self.model_base_path, f"{model_name}_version.json")
-        with open(version_file, 'w') as f:
-            json.dump(version_info, f, indent=2)
+        with open(version_file, 'w', encoding='utf-8') as f:
+            json.dump(version_info, f, indent=2, ensure_ascii=False)
 
     def _clean_old_model(self, model_name: str):
         """

@@ -3,7 +3,7 @@ import axios from 'axios';
 // Python 서버 API 인스턴스 생성
 export const pythonServerAPI = axios.create({
   baseURL: process.env.PYTHON_SERVER_URL || 'http://localhost:8000',
-  timeout: 10000,
+  timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
   },
