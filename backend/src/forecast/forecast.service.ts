@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
@@ -140,15 +140,27 @@ export class ForecastService {
       return savedForecasts;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error('API 요청 실패:', {
+        this.logger.error('API 요청 실패:', {
           status: error.response?.status,
           data: error.response?.data,
           message: error.message,
         });
+        // HTTP 상태 코드에 따른 적절한 예외 처리
+        if (error.response?.status === 404) {
+          throw new HttpException(
+            '날씨 API 서비스를 찾을 수 없습니다.',
+            HttpStatus.NOT_FOUND,
+          );
+        } else if (error.response?.status === 401) {
+          throw new HttpException(
+            'API 인증에 실패했습니다.',
+            HttpStatus.UNAUTHORIZED,
+          );
+        }
       }
-      throw new Error(
-        '날씨 데이터를 가져오는데 실패했습니다: ' +
-          (error instanceof Error ? error.message : '알 수 없는 오류'),
+      throw new HttpException(
+        '날씨 데이터를 가져오는데 실패했습니다.',
+        HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }
   }
