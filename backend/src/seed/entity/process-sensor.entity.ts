@@ -54,16 +54,16 @@ export class ProcessEquipmentSensorModel extends BaseModel {
   gt1_압축기_입구_상대습도: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBA11CG901-ZQ11' })
-  gt1_IGV_POSN: number;
+  gt1_igv_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBA11CG911-ZQ11' })
-  gt1_VGV1_POSN: number;
+  gt1_vgv1_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBA11CG921-ZQ11' })
-  gt1_VGV2_POSN: number;
+  gt1_vgv2_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBA11CG931-ZQ11' })
-  gt1_VGV3_POSN: number;
+  gt1_vgv3_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBL10CP105-XQ01' })
   gt1_헤파필터_차압: number;
@@ -84,49 +84,49 @@ export class ProcessEquipmentSensorModel extends BaseModel {
   gt1_연료가스_유량계_온도: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBP21AA151C-XQ01' })
-  gt1_A_Stage_CV_POSN: number;
+  gt1_a_stage_cv_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBP22AA151C-XQ01' })
-  gt1_B_Stage_CV_POSN: number;
+  gt1_b_stage_cv_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBP23AA151C-XQ01' })
-  gt1_C_Stage_CV_POSN: number;
+  gt1_c_stage_cv_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBP31AA151C-XQ01' })
-  gt1_Pilot_Stage_CV_POSN: number;
+  gt1_pilot_stage_cv_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBP32AA151C-XQ01' })
-  gt1_D_Stage_CV_POSN: number;
+  gt1_d_stage_cv_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBP21FF901-ZQ01' })
-  gt1_A_Stage_FG_FLOW: number;
+  gt1_a_stage_fg_flow: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBP22FF901-ZQ01' })
-  gt1_B_Stage_FG_FLOW: number;
+  gt1_b_stage_fg_flow: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBP23FF901-ZQ01' })
-  gt1_C_Stage_FG_FLOW: number;
+  gt1_c_stage_fg_flow: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBP31FF901-ZQ01' })
-  gt1_Pilot_Stage_FG_FLOW: number;
+  gt1_pilot_stage_fg_flow: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBP32FF901-ZQ01' })
-  gt1_D_Stage_FG_FLOW: number;
+  gt1_d_stage_fg_flow: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBR10FT901-ZQ01' })
-  gt1_OTC: number;
+  gt1_otc: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBY10CS901-ZQ11' })
   gt1_터빈_속도: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBA10FG100-ZQ01' })
-  gt1_HCO_SHAFT_POSN: number;
+  gt1_hco_shaft_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBL15CG003-XQ01' })
-  gt1_방빙장치_Valve: number;
+  gt1_방빙장치_valve: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBY10EP801-XQ01' })
-  gt1_정비_주기_EOH: number;
+  gt1_정비_주기_eoh: number;
 
   @SensorColumn({ comment: 'GS.U4.51MBR10CT900-ZQ01' })
   gt1_배기구_온도: number;
@@ -148,16 +148,16 @@ export class ProcessEquipmentSensorModel extends BaseModel {
   gt2_압축기_입구_상대습도: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBA11CG901-ZQ11' })
-  gt2_IGV_POSN: number;
+  gt2_igv_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBA11CG911-ZQ11' })
-  gt2_VGV1_POSN: number;
+  gt2_vgv1_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBA11CG921-ZQ11' })
-  gt2_VGV2_POSN: number;
+  gt2_vgv2_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBA11CG931-ZQ11' })
-  gt2_VGV3_POSN: number;
+  gt2_vgv3_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBL10CP105-XQ01' })
   gt2_헤파필터_차압: number;
@@ -178,49 +178,49 @@ export class ProcessEquipmentSensorModel extends BaseModel {
   gt2_연료가스_유량계_온도: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBP21AA151C-XQ01' })
-  gt2_A_Stage_CV_POSN: number;
+  gt2_a_stage_cv_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBP22AA151C-XQ01' })
-  gt2_B_Stage_CV_POSN: number;
+  gt2_b_stage_cv_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBP23AA151C-XQ01' })
-  gt2_C_Stage_CV_POSN: number;
+  gt2_c_stage_cv_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBP31AA151C-XQ01' })
-  gt2_Pilot_Stage_CV_POSN: number;
+  gt2_pilot_stage_cv_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBP32AA151C-XQ01' })
-  gt2_D_Stage_CV_POSN: number;
+  gt2_d_stage_cv_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBP21FF901-ZQ01' })
-  gt2_A_Stage_FG_FLOW: number;
+  gt2_a_stage_fg_flow: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBP22FF901-ZQ01' })
-  gt2_B_Stage_FG_FLOW: number;
+  gt2_b_stage_fg_flow: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBP23FF901-ZQ01' })
-  gt2_C_Stage_FG_FLOW: number;
+  gt2_c_stage_fg_flow: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBP31FF901-ZQ01' })
-  gt2_Pilot_Stage_FG_FLOW: number;
+  gt2_pilot_stage_fg_flow: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBP32FF901-ZQ01' })
-  gt2_D_Stage_FG_FLOW: number;
+  gt2_d_stage_fg_flow: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBR10FT901-ZQ01' })
-  gt2_OTC: number;
+  gt2_otc: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBY10CS901-ZQ11' })
   gt2_터빈_속도: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBA10FG100-ZQ01' })
-  gt2_HCO_SHAFT_POSN: number;
+  gt2_hco_shaft_posn: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBL15CG003-XQ01' })
-  gt2_방빙장치_Valve: number;
+  gt2_방빙장치_valve: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBY10EP801-XQ01' })
-  gt2_정비_주기_EOH: number;
+  gt2_정비_주기_eoh: number;
 
   @SensorColumn({ comment: 'GS.U4.52MBR10CT900-ZQ01' })
   gt2_배기구_온도: number;
@@ -229,8 +229,9 @@ export class ProcessEquipmentSensorModel extends BaseModel {
   gt2_배기구_압력: number;
 
   //* ST 관련 센서
-  @SensorColumn({ comment: 'GS.U4.50MKA01CE903N-XQ01' })
-  st_발전량: number;
+  // 추후 추가 예정
+  // @SensorColumn({ comment: 'GS.U4.50MKA01CE903N-XQ01' })
+  // st_발전량: number;
 
   @SensorColumn({ comment: 'GS.U4.50MAG10FP002-XQ01' })
   st_콘덴서_압력: number;
@@ -298,7 +299,7 @@ export class ProcessEquipmentSensorModel extends BaseModel {
   @SensorColumn({ comment: 'GS.U4.51LBA10CF901-ZQ01' })
   hrsg1_hp_flow: number;
 
-  @SensorColumn({ comment: 'GS.U4.51LBC45CF001- ZQ01' })
+  @SensorColumn({ comment: 'GS.U4.51LBC45CF001-ZQ01' })
   hrsg1_crh_flow: number;
 
   @SensorColumn({ comment: 'GS.U4.51LBB45CT001-XQ01' })
@@ -332,7 +333,7 @@ export class ProcessEquipmentSensorModel extends BaseModel {
   @SensorColumn({ comment: 'GS.U4.52LBA10CF901-ZQ01' })
   hrsg2_hp_flow: number;
 
-  @SensorColumn({ comment: 'GS.U4.52LBC45CF001- ZQ01' })
+  @SensorColumn({ comment: 'GS.U4.52LBC45CF001-ZQ01' })
   hrsg2_crh_flow: number;
 
   @SensorColumn({ comment: 'GS.U4.52LBB45CT001-XQ01' })

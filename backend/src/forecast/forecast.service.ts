@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
@@ -120,24 +120,29 @@ export class ForecastService {
       // upsert 작업 수행
       const savedForecasts = await Promise.all(
         hourlyForecasts.map(async (forecast) => {
-          const existingForecast = await this.forecastRepository.findOne({
-            where: { forecastDate: forecast.forecastDate },
-          });
-
-          if (existingForecast) {
-            // 기존 데이터가 있으면 업데이트
-            return this.forecastRepository.save({
-              ...existingForecast,
-              ...forecast,
+          try {
+            const existingForecast = await this.forecastRepository.findOne({
+              where: { forecastDate: forecast.forecastDate },
             });
-          } else {
-            // 새로운 데이터 삽입
-            return this.forecastRepository.save(forecast);
+
+            if (existingForecast) {
+              // 기존 데이터가 있으면 업데이트
+              return this.forecastRepository.save({
+                ...existingForecast,
+                ...forecast,
+              });
+            } else {
+              // 새로운 데이터 삽입
+              return this.forecastRepository.save(forecast);
+            }
+          } catch (error) {
+            this.logger.error('예보 데이터 업데이트 오류:', error);
+            return null;
           }
         }),
       );
 
-      return savedForecasts;
+      return savedForecasts.filter(Boolean);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         this.logger.error('API 요청 실패:', {
@@ -145,23 +150,18 @@ export class ForecastService {
           data: error.response?.data,
           message: error.message,
         });
-        // HTTP 상태 코드에 따른 적절한 예외 처리
+        // 에러 로깅만 하고 서버는 계속 실행
         if (error.response?.status === 404) {
-          throw new HttpException(
-            '날씨 API 서비스를 찾을 수 없습니다.',
-            HttpStatus.NOT_FOUND,
-          );
+          this.logger.error('날씨 API 서비스를 찾을 수 없습니다.');
         } else if (error.response?.status === 401) {
-          throw new HttpException(
-            'API 인증에 실패했습니다.',
-            HttpStatus.UNAUTHORIZED,
-          );
+          this.logger.error('API 인증에 실패했습니다.');
         }
+      } else {
+        this.logger.error('날씨 데이터를 가져오는데 실패했습니다.', error);
       }
-      throw new HttpException(
-        '날씨 데이터를 가져오는데 실패했습니다.',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+
+      // 빈 배열 반환하여 서버 실행 유지
+      return [];
     }
   }
 }

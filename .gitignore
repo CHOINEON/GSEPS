@@ -74,3 +74,4 @@ backend/postgres-data
 **/.python-version
 
 AI/models/
+tmp/

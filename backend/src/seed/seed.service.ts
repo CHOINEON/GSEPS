@@ -1,19 +1,28 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron, SchedulerRegistry } from '@nestjs/schedule';
+import { InjectRepository } from '@nestjs/typeorm';
+import { parse } from 'csv-parse';
+import { createReadStream } from 'fs';
+import { Repository } from 'typeorm';
 import { ForecastService } from '../forecast/forecast.service';
 import { PredictionService } from '../prediction/prediction.service';
+import { convertTagToDBColumn } from './constants/column-mapping';
+import { ProcessEquipmentSensorModel } from './entity/process-sensor.entity';
 
 @Injectable()
 export class SeedService {
   private readonly logger = new Logger(SeedService.name);
   private readonly predictionTimes = [0, 3, 6, 9, 12, 15, 18, 21];
+  private readonly CHUNK_SIZE = 100; // 100개씩 처리
 
   constructor(
     private forecastService: ForecastService,
     private schedulerRegistry: SchedulerRegistry,
     private configService: ConfigService,
     private predictionService: PredictionService,
+    @InjectRepository(ProcessEquipmentSensorModel)
+    private processEquipmentSensorRepository: Repository<ProcessEquipmentSensorModel>,
   ) {}
 
   // 매시간마다 1분에 날씨 데이터 업데이트
@@ -69,5 +78,77 @@ export class SeedService {
     this.logger.log(`다음 예보 업데이트 : ${job.nextDate()}`);
     const job2 = this.schedulerRegistry.getCronJob('predictions');
     this.logger.log(`다음 예측 시간 : ${job2.nextDate()}`);
+  }
+
+  async upsertProcessEquipmentSensor() {
+    const csvFilePath = `./tmp/total_data_20240312_20240831.csv`;
+    this.logger.debug(`CSV 파일 경로: ${csvFilePath}`);
+    let chunk = [];
+    let totalProcessed = 0;
+
+    try {
+      const parser = createReadStream(csvFilePath).pipe(
+        parse({
+          columns: true,
+          skip_empty_lines: true,
+        }),
+      );
+
+      for await (const record of parser) {
+        const mappedRecord = this.mapCsvRecordToEntity(record);
+        chunk.push(mappedRecord);
+
+        if (chunk.length >= this.CHUNK_SIZE) {
+          await this.processChunk(chunk);
+          totalProcessed += chunk.length;
+          this.logger.log(`처리된 레코드 수: ${totalProcessed}`);
+          chunk = [];
+        }
+      }
+
+      // 남은 레코드 처리
+      if (chunk.length > 0) {
+        await this.processChunk(chunk);
+        totalProcessed += chunk.length;
+        this.logger.log(`최종 처리된 레코드 수: ${totalProcessed}`);
+      }
+    } catch (error) {
+      this.logger.error('데이터 처리 중 오류 발생:', error);
+      throw error;
+    }
+  }
+
+  private mapCsvRecordToEntity(
+    record: any,
+  ): Partial<ProcessEquipmentSensorModel> {
+    const mappedRecord: any = {};
+
+    for (const [key, value] of Object.entries(record)) {
+      const dbColumn = convertTagToDBColumn(key);
+      if (dbColumn) {
+        if (dbColumn === 'timestamp') {
+          if (typeof value === 'string') {
+            mappedRecord[dbColumn] = new Date(value);
+          }
+        } else {
+          if (typeof value === 'string') {
+            mappedRecord[dbColumn] = parseFloat(value);
+          }
+        }
+      }
+    }
+
+    return mappedRecord;
+  }
+  private async processChunk(chunk: Partial<ProcessEquipmentSensorModel>[]) {
+    try {
+      // save() 메소드 사용
+      await this.processEquipmentSensorRepository.save(chunk, {
+        chunk: Math.min(this.CHUNK_SIZE, chunk.length),
+      });
+    } catch (error) {
+      this.logger.error('청크 처리 중 오류 발생:', error);
+      throw error;
+    }
   }
 }
