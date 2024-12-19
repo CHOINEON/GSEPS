@@ -8,7 +8,7 @@ import PredictionTable from "../../components/PredictionTable/Table";
 import DateTime from "../../features/Layout/components/DateTime";
 import { getSelectedForecast } from "../../features/api/PredictionApi";
 import logger from "../../shared/logger";
-// import { useSelectedCellStore } from "../../stores/index";
+import { useSelectedCellStore } from "../../stores/index";
 
 const GT1: React.FC = () => {
   const [selectedForecast, setSelectedForecast] = useState<any>(null);
@@ -16,7 +16,7 @@ const GT1: React.FC = () => {
   const [predictionDate, setPredictionDate] = useState<Dayjs>(dayjs());
   const [predictionTimes, setPredictionTimes] = useState<number[]>([]);
   const [selectedCells, setSelectedCells] = useState<string[]>([]);
-  // const { addSelectedCell, removeSelectedCell } = useSelectedCellStore();
+  const { addSelectedCell, removeSelectedCell } = useSelectedCellStore();
 
   const timeOptions = [
     { label: "0시", value: 0 },
@@ -56,7 +56,7 @@ const GT1: React.FC = () => {
     if (times.length <= 4) {
       setPredictionTimes(times);
     } else {
-      message.warning("최대 4개까지만 선택할 수 있습니다.");
+      message.warning("최대 4개까지만 선��할 수 있습니다.");
     }
   };
 
@@ -82,25 +82,30 @@ const GT1: React.FC = () => {
         ?.predictionId;
 
     setSelectedCells((prev) => {
-      // 이미 선택된 셀을 클릭한 경우 제거
       if (prev.includes(cellId)) {
+        removeSelectedCell(predictionTime, time);
         return prev.filter((id) => id !== cellId);
       }
 
-      // 같은 예측 시간대(행)의 기존 선택을 제거하고 새로운 선택 추가
       const filteredSelection = prev.filter(
         (id) => !id.startsWith(`${predictionTime}_`)
       );
       const newSelection = [...filteredSelection, cellId];
 
-      // 최대 2개까지만 유지
+      addSelectedCell({
+        time,
+        predictionTime,
+        value,
+        predictionId,
+      });
+
       return newSelection.slice(-2);
     });
 
     logger.log(
       `- Clicked: Prediction Time ${predictionTime}, Hour ${time}, Value ${value}, Prediction ID ${predictionId}
        - Scope Date: ${scopeDate.format("YYYY-MM-DD")}
-    - Prediction Date: ${predictionDate.format("YYYY-MM-DD")}`
+       - Prediction Date: ${predictionDate.format("YYYY-MM-DD")}`
     );
   };
 
