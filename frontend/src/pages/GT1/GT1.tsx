@@ -8,6 +8,7 @@ import PredictionTable from "../../components/PredictionTable/Table";
 import DateTime from "../../features/Layout/components/DateTime";
 import { getSelectedForecast } from "../../features/api/PredictionApi";
 import logger from "../../shared/logger";
+// import { useSelectedCellStore } from "../../stores/index";
 
 const GT1: React.FC = () => {
   const [selectedForecast, setSelectedForecast] = useState<any>(null);
@@ -15,6 +16,7 @@ const GT1: React.FC = () => {
   const [predictionDate, setPredictionDate] = useState<Dayjs>(dayjs());
   const [predictionTimes, setPredictionTimes] = useState<number[]>([]);
   const [selectedCells, setSelectedCells] = useState<string[]>([]);
+  // const { addSelectedCell, removeSelectedCell } = useSelectedCellStore();
 
   const timeOptions = [
     { label: "0시", value: 0 },
@@ -96,7 +98,7 @@ const GT1: React.FC = () => {
     });
 
     logger.log(
-      `Clicked: Prediction Time ${predictionTime}, Hour ${time}, Value ${value}, Prediction ID ${predictionId}
+      `- Clicked: Prediction Time ${predictionTime}, Hour ${time}, Value ${value}, Prediction ID ${predictionId}
        - Scope Date: ${scopeDate.format("YYYY-MM-DD")}
     - Prediction Date: ${predictionDate.format("YYYY-MM-DD")}`
     );
@@ -193,7 +195,7 @@ const GT1: React.FC = () => {
       </Title>
 
       <div style={{ margin: "0px 20px" }}>
-        {selectedForecast && predictionTimes.length > 0 && (
+        {selectedForecast && (
           <PredictionChart
             selectedForecast={selectedForecast}
             predictionTimes={predictionTimes}
