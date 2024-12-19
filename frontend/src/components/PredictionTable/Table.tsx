@@ -191,7 +191,8 @@ const PredictionTable: React.FC<PredictionTableProps> = ({
               onClick={() =>
                 value !== 0 &&
                 handleCellClick(i.toString(), predictionTime, value)
-              }>
+              }
+            >
               {value}
             </div>
           );
@@ -224,7 +225,8 @@ const PredictionTable: React.FC<PredictionTableProps> = ({
           border: "none",
           borderRadius: "4px",
           cursor: selectedCells.length === 2 ? "pointer" : "not-allowed",
-        }}>
+        }}
+      >
         비교하기
       </Button>
 
@@ -240,7 +242,8 @@ const PredictionTable: React.FC<PredictionTableProps> = ({
             height: "calc(90vh - 110px)", // 모달 헤더/푸터 고려한 높이
             overflow: "auto", // 내용이 넘칠 경우 스크롤
           },
-        }}></Modal>
+        }}
+      ></Modal>
 
       <style>
         {`
