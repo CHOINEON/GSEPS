@@ -10,6 +10,7 @@ import { ForecastModel } from './forecast/entities/forecast.entity';
 import { ForecastModule } from './forecast/forecast.module';
 import { PredictionModel } from './prediction/entities/prediction.entity';
 import { PredictionModule } from './prediction/prediction.module';
+import { ProcessMaxOutputModel } from './seed/entity/process-maxoutput.entity';
 import { ProcessEquipmentSensorModel } from './seed/entity/process-sensor.entity';
 import { SeedModule } from './seed/seed.module';
 @Module({
@@ -25,7 +26,12 @@ import { SeedModule } from './seed/seed.module';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [ForecastModel, PredictionModel, ProcessEquipmentSensorModel],
+      entities: [
+        ForecastModel,
+        PredictionModel,
+        ProcessEquipmentSensorModel,
+        ProcessMaxOutputModel,
+      ],
       synchronize: process.env.NODE_ENV !== 'production',
       namingStrategy: new SnakeNamingStrategy() as any,
     }),

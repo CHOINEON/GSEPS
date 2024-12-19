@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { json, urlencoded } from 'express';
 import { AppModule } from './app.module';
+import { HttpExceptionFilter } from './common/exception/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -12,7 +13,7 @@ async function bootstrap() {
   });
 
   app.setGlobalPrefix('api');
-
+  app.useGlobalFilters(new HttpExceptionFilter());
   // CORS 설정 추가
   app.enableCors({
     origin: true,

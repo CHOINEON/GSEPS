@@ -4,8 +4,17 @@ import { SensorColumn } from '../decorator/sensor-column.decorator';
 @Entity()
 export class ProcessEquipmentSensorModel extends BaseModel {
   @Index()
-  @Column()
+  @Column({
+    type: 'timestamp',
+    precision: 0,
+  })
   timestamp: Date;
+
+  @Index()
+  @Column({
+    default: false,
+  })
+  is_max_output: boolean;
 
   //* 전체
   @SensorColumn({ comment: 'GS.U4.50CJA00DE100-XQ20' })
