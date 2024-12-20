@@ -35,3 +35,8 @@ tzdata==2024.2
 tzlocal==5.2
 urllib3==2.2.3
 uvicorn==0.32.1
+torch==2.5.1
+torchaudio==2.5.1
+torchvision==0.20.1
+tornado==6.3
+
