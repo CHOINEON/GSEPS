@@ -1,4 +1,4 @@
-import { Checkbox, DatePicker, message } from "antd";
+import { Checkbox, DatePicker, message, Tag, Flex } from "antd";
 import Title from "antd/es/typography/Title";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
@@ -8,15 +8,22 @@ import PredictionTable from "../../components/PredictionTable/Table";
 import DateTime from "../../features/Layout/components/DateTime";
 import { getSelectedForecast } from "../../features/api/PredictionApi";
 import logger from "../../shared/logger";
-import { useSelectedCellStore } from "../../stores/index";
+import { useSelectedCellStore, useDateTimeStore } from "../../stores/index";
 
 const GT1: React.FC = () => {
   const [selectedForecast, setSelectedForecast] = useState<any>(null);
-  const [scopeDate, setScopeDate] = useState<Dayjs>(dayjs());
-  const [predictionDate, setPredictionDate] = useState<Dayjs>(dayjs());
-  const [predictionTimes, setPredictionTimes] = useState<number[]>([]);
   const [selectedCells, setSelectedCells] = useState<string[]>([]);
   const { addSelectedCell, removeSelectedCell } = useSelectedCellStore();
+  const {
+    scopeDate,
+    predictionDate,
+    predictionTimes,
+    setScopeDate,
+    setPredictionDate,
+    setPredictionTimes,
+    addToHistory,
+    history,
+  } = useDateTimeStore();
 
   const timeOptions = [
     { label: "0시", value: 0 },
@@ -54,9 +61,10 @@ const GT1: React.FC = () => {
 
   const handleTimeChange = (times: number[]) => {
     if (times.length <= 4) {
+      console.log("예측 시간 변경:", times);
       setPredictionTimes(times);
     } else {
-      message.warning("최대 4개까지만 선��할 수 있습니다.");
+      message.warning("최대 4개까지만 선택할 수 있습니다.");
     }
   };
 
@@ -102,11 +110,11 @@ const GT1: React.FC = () => {
       return newSelection.slice(-2);
     });
 
-    logger.log(
-      `- Clicked: Prediction Time ${predictionTime}, Hour ${time}, Value ${value}, Prediction ID ${predictionId}
-       - Scope Date: ${scopeDate.format("YYYY-MM-DD")}
-       - Prediction Date: ${predictionDate.format("YYYY-MM-DD")}`
-    );
+    // logger.log(
+    //   `- Clicked: Prediction Time ${predictionTime}, Hour ${time}, Value ${value}, Prediction ID ${predictionId}
+    //    - Scope Date: ${scopeDate.format("YYYY-MM-DD")}
+    //    - Prediction Date: ${predictionDate.format("YYYY-MM-DD")}`
+    // );
   };
 
   // 예측 날짜 선택 제한 함수 수정
@@ -124,11 +132,19 @@ const GT1: React.FC = () => {
   // scopeDate가 변경될 때 predictionDate도 함께 체크하고 조정
   const handleScopeDateChange = (date: Dayjs | null) => {
     if (date) {
+      // console.log("조회 시점 변경:", date.format("YYYY-MM-DD"));
       setScopeDate(date);
-      // 예측 날짜가 새로운 조회 날짜보다 미래인 경우 조회 날짜로 설정
       if (predictionDate.isAfter(date, "day")) {
+        // console.log("예측 시점 자동 조정:", date.format("YYYY-MM-DD"));
         setPredictionDate(date);
       }
+    }
+  };
+
+  const handlePredictionDateChange = (date: Dayjs | null) => {
+    if (date) {
+      // console.log("예측 시점 변경:", date.format("YYYY-MM-DD"));
+      setPredictionDate(date);
     }
   };
 
@@ -139,9 +155,84 @@ const GT1: React.FC = () => {
     return current.isAfter(dayjs().add(2, "day"), "day");
   };
 
+  // selectedCells 상태가 변경될 때마다 콘솔에 출력
+  // useEffect(() => {
+  //   console.log("Selected Cells Store Data:", selectedCells);
+  // }, [selectedCells]);
+
+  // Zustand 상태 변화 모니터링
+  // useEffect(() => {
+  //   console.log("DateTime Store 상태 변경:", {
+  //     scopeDate: scopeDate.format("YYYY-MM-DD"),
+  //     predictionDate: predictionDate.format("YYYY-MM-DD"),
+  //     predictionTimes,
+  //   });
+  // }, [scopeDate, predictionDate, predictionTimes]);
+
+  // 상태 변경 시 히스토리에 추가
+  useEffect(() => {
+    addToHistory();
+  }, [scopeDate, predictionDate, predictionTimes]);
+
+  // 히스토리 모니터링을 위한 로그
+  useEffect(() => {
+    console.log(
+      "DateTime History:",
+      history.map((item) => ({
+        scopeDate: item.scopeDate.format("YYYY-MM-DD"),
+        predictionDate: item.predictionDate.format("YYYY-MM-DD"),
+        predictionTimes: item.predictionTimes,
+        timestamp: new Date(item.timestamp).toLocaleString(),
+      }))
+    );
+  }, [history]);
+
+  const renderHistoryTags = () => {
+    const tagColors = ["#108ee9", "#2db7f5", "#87d068", "#f50"];
+
+    return (
+      <div
+        style={{
+          backgroundColor: "#f5f5f5",
+          padding: "10px",
+          margin: "10px 20px",
+          borderRadius: "4px",
+        }}
+      >
+        <Title level={5} style={{ margin: "0 0 8px 0" }}>
+          최근 조회 기록
+        </Title>
+        <Flex gap="4px 0" wrap>
+          {history.map((item, index) => (
+            <Tag
+              key={item.timestamp}
+              color={tagColors[index]}
+              style={{
+                margin: "4px",
+                padding: "4px 8px",
+                fontSize: "13px",
+              }}
+            >
+              {`조회 시점 ${item.scopeDate.format(
+                "MM.DD"
+              )} 예측 시점 ${item.predictionDate.format(
+                "MM.DD"
+              )} 예측 시간 ${String(item.predictionTimes[0]).padStart(
+                2,
+                "0"
+              )}:00`}
+            </Tag>
+          ))}
+        </Flex>
+      </div>
+    );
+  };
+
   return (
     <div>
       <DateTime />
+      {renderHistoryTags()}
+
       <Title
         level={4}
         style={{
@@ -178,7 +269,7 @@ const GT1: React.FC = () => {
           </Title>
           <DatePicker
             value={predictionDate}
-            onChange={(date) => date && setPredictionDate(date)}
+            onChange={handlePredictionDateChange}
             disabledDate={disabledPredictionDate}
           />
         </div>
