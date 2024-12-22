@@ -9,6 +9,7 @@ import DateTime from "../../features/Layout/components/DateTime";
 import { getSelectedForecast } from "../../features/api/PredictionApi";
 import logger from "../../shared/logger";
 import { useSelectedCellStore, useDateTimeStore } from "../../stores/index";
+import HistoryTags from "../../components/Tag";
 
 const GT1: React.FC = () => {
   const [selectedForecast, setSelectedForecast] = useState<any>(null);
@@ -187,51 +188,10 @@ const GT1: React.FC = () => {
     );
   }, [history]);
 
-  const renderHistoryTags = () => {
-    const tagColors = ["#108ee9", "#2db7f5", "#87d068", "#f50"];
-
-    return (
-      <div
-        style={{
-          backgroundColor: "#f5f5f5",
-          padding: "10px",
-          margin: "10px 20px",
-          borderRadius: "4px",
-        }}
-      >
-        <Title level={5} style={{ margin: "0 0 8px 0" }}>
-          최근 조회 기록
-        </Title>
-        <Flex gap="4px 0" wrap>
-          {history.map((item, index) => (
-            <Tag
-              key={item.timestamp}
-              color={tagColors[index]}
-              style={{
-                margin: "4px",
-                padding: "4px 8px",
-                fontSize: "13px",
-              }}
-            >
-              {`조회 시점 ${item.scopeDate.format(
-                "MM.DD"
-              )} 예측 시점 ${item.predictionDate.format(
-                "MM.DD"
-              )} 예측 시간 ${String(item.predictionTimes[0]).padStart(
-                2,
-                "0"
-              )}:00`}
-            </Tag>
-          ))}
-        </Flex>
-      </div>
-    );
-  };
-
   return (
     <div>
-      <DateTime />
-      {renderHistoryTags()}
+      {/* <DateTime /> */}
+      {/* <HistoryTags history={history} /> */}
 
       <Title
         level={4}
@@ -285,7 +245,7 @@ const GT1: React.FC = () => {
           />
         </div>
       </div>
-
+      <HistoryTags history={history} />
       <Title level={3} style={{ margin: 0, marginTop: 5, marginLeft: 10 }}>
         예측 차트
       </Title>
