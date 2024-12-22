@@ -19,17 +19,34 @@ const DateTime: React.FC = () => {
   }, []);
 
   return (
-    <Flex>
+    <Flex align="center">
       <Title
-        level={3}
-        style={{ margin: 0, marginTop: 5, marginRight: 10, marginLeft: 5 }}
+        level={4}
+        style={{
+          margin: 0,
+          color: "white",
+          marginRight: 10,
+        }}
       >
         현재시간 :{" "}
       </Title>
-      <Title level={3} style={{ margin: 0, marginTop: 5 }}>
+      <Title
+        level={4}
+        style={{
+          margin: 0,
+          color: "white",
+          marginRight: 10,
+        }}
+      >
         {Today}
       </Title>
-      <Title level={3} style={{ margin: 0, marginTop: 5 }}>
+      <Title
+        level={4}
+        style={{
+          margin: 0,
+          color: "white",
+        }}
+      >
         {currentTime}
       </Title>
     </Flex>

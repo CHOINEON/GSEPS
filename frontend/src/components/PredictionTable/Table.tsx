@@ -21,14 +21,14 @@ const PredictionTable: React.FC<PredictionTableProps> = ({
 }) => {
   //--------------------------------
   //들어오는 데이터 type 확인용 콘솔로그
-  logger.log("전체 Selected Forecast 객체:", selectedForecast);
-  logger.log("Selected Forecast의 키들:", Object.keys(selectedForecast || {}));
-  logger.log(
-    "Selected Forecast ID:",
-    typeof selectedForecast?.forecasts[1]?.time
-  );
-  logger.log("Prediction Times:", predictionTimes);
-  logger.log("Selected Cells:", selectedCells);
+  // logger.log("전체 Selected Forecast 객체:", selectedForecast);
+  // logger.log("Selected Forecast의 키들:", Object.keys(selectedForecast || {}));
+  // logger.log(
+  //   "Selected Forecast ID:",
+  //   typeof selectedForecast?.forecasts[1]?.time
+  // );
+  // logger.log("Prediction Times:", predictionTimes);
+  // logger.log("Selected Cells:", selectedCells);
   //---------------------------------
 
   // 모달 상태 관리
