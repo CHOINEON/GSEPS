@@ -144,8 +144,10 @@ const GT1: React.FC = () => {
 
   const handlePredictionDateChange = (date: Dayjs | null) => {
     if (date) {
-      // console.log("예측 시점 변경:", date.format("YYYY-MM-DD"));
+      console.log("예측 시점 변경:", date.format("YYYY-MM-DD"));
       setPredictionDate(date);
+      // 예측 시점이 변경되면 예측 시간 초기화
+      setPredictionTimes([]);
     }
   };
 

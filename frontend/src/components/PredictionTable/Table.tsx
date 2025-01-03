@@ -1,6 +1,7 @@
 import { Button, Modal, Table } from "antd";
 import React, { useState } from "react";
 import logger from "../../shared/logger";
+
 import {
   Forecast,
   HumidityRow,
