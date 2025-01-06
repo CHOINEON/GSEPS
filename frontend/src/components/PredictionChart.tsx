@@ -33,6 +33,13 @@ const PredictionChart: React.FC<PredictionChartProps> = ({
   formatHour,
   getPredictionSum,
 }) => {
+  const colorSchemes = [
+    { borderColor: "#ff9999", backgroundColor: "#ffe6e6" }, // 빨강계열
+    { borderColor: "#ffa366", backgroundColor: "#fff0e6" }, // 주황계열
+    { borderColor: "#ffdd66", backgroundColor: "#fff9e6" }, // 노랑계열
+    { borderColor: "#66cc66", backgroundColor: "#e6ffe6" }, // 진한 초록계열
+  ];
+
   const prepareChartData = () => {
     if (!selectedForecast?.forecasts || !selectedForecast?.predictions) {
       return {
@@ -59,18 +66,14 @@ const PredictionChart: React.FC<PredictionChartProps> = ({
         }
       );
 
-      const colors = [
-        { borderColor: "#99ff99", backgroundColor: "#e6ffe6" },
-        { borderColor: "#ffff66", backgroundColor: "#fffae6" },
-        { borderColor: "#ffb366", backgroundColor: "#fff2e6" },
-        { borderColor: "#ff9999", backgroundColor: "#ffe6e6" },
-      ];
+      // 시간 순서에 따라 색상 스키마 적용
+      const colorScheme = colorSchemes[index];
 
       return {
         label: `${time}시 예측`,
         data: data,
-        borderColor: colors[index].borderColor,
-        backgroundColor: colors[index].backgroundColor,
+        borderColor: colorScheme.borderColor,
+        backgroundColor: colorScheme.backgroundColor,
         fill: false,
         tension: 0.4,
         pointRadius: 5,
