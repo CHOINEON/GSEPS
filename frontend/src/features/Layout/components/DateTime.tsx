@@ -1,60 +1,96 @@
 import React, { useEffect, useState } from "react";
-import Title from "antd/es/typography/Title";
+import { Typography, Space } from "antd";
+import { ClockCircleOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 
+const { Text } = Typography;
+
 const DateTime: React.FC = () => {
-  const [Today, setToday] = useState(new Date().toLocaleDateString());
-  const [currentTime, setCurrentTime] = useState(
-    new Date().toLocaleTimeString()
-  );
+  const [today, setToday] = useState(new Date());
+
   useEffect(() => {
-    setToday(new Date().toLocaleDateString());
-    setCurrentTime(new Date().toLocaleTimeString());
     const timer = setInterval(() => {
-      setToday(new Date().toLocaleDateString());
-      setCurrentTime(new Date().toLocaleTimeString());
+      setToday(new Date());
     }, 1000);
 
     return () => clearInterval(timer);
   }, []);
 
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString("ko-KR", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      weekday: "short",
+    });
+  };
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString("ko-KR", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    });
+  };
+
   return (
-    <Flex align="center">
-      <Title
-        level={4}
-        style={{
-          margin: 0,
-          color: "white",
-          marginRight: 10,
-        }}
-      >
-        현재시간 :{" "}
-      </Title>
-      <Title
-        level={4}
-        style={{
-          margin: 0,
-          color: "white",
-          marginRight: 10,
-        }}
-      >
-        {Today}
-      </Title>
-      <Title
-        level={4}
-        style={{
-          margin: 0,
-          color: "white",
-        }}
-      >
-        {currentTime}
-      </Title>
-    </Flex>
+    <DateTimeWrapper>
+      <Space size={16}>
+        <Space size={8}>
+          <ClockCircleOutlined
+            style={{
+              fontSize: "18px",
+              color: "#fff",
+            }}
+          />
+          {/* <Text strong style={{ color: "#fff", fontSize: "15px" }}>
+            현재 시간
+          </Text> */}
+        </Space>
+
+        <DateTimeContent>
+          <Text
+            style={{
+              color: "#fff",
+              fontSize: "15px",
+              padding: "4px 12px",
+              background: "rgba(255, 255, 255, 0.1)",
+              borderRadius: "4px",
+            }}
+          >
+            {formatDate(today)}
+          </Text>
+          <Text
+            style={{
+              color: "#fff",
+              fontSize: "15px",
+              padding: "4px 12px",
+              background: "rgba(255, 255, 255, 0.1)",
+              borderRadius: "4px",
+              fontFamily: "monospace",
+            }}
+          >
+            {formatTime(today)}
+          </Text>
+        </DateTimeContent>
+      </Space>
+    </DateTimeWrapper>
   );
 };
 
 export default DateTime;
-const Flex = styled.div`
+
+const DateTimeWrapper = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
+  padding: 8px 0;
+  background: transparent;
+`;
+
+const DateTimeContent = styled.div`
+  display: flex;
+  gap: 8px;
+  align-items: center;
 `;
