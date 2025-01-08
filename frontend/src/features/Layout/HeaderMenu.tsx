@@ -6,7 +6,12 @@ const HeaderMenu = () => {
   const navigate = useNavigate();
   return (
     <Menu
-      style={{ justifyContent: "center" }}
+      style={{
+        justifyContent: "center",
+        // backdropFilter: "blur(8px)",
+        backgroundColor: "white",
+        border: "1px solid rgba(231, 234, 237, 0.8)",
+      }}
       mode="horizontal"
       defaultSelectedKeys={["1"]}
       onClick={({ key }) => {

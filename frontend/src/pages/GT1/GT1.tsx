@@ -1,13 +1,14 @@
-import { Checkbox, DatePicker, message, Tag, Flex } from "antd";
+import { DatePicker, message, Flex, Card, Button } from "antd";
+import { ClockCircleOutlined, CalendarOutlined } from "@ant-design/icons";
 import Title from "antd/es/typography/Title";
 import type { Dayjs } from "dayjs";
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import PredictionChart from "../../components/PredictionChart";
 import PredictionTable from "../../components/PredictionTable/Table";
-import DateTime from "../../features/Layout/components/DateTime";
+
 import { getSelectedForecast } from "../../features/api/PredictionApi";
-import logger from "../../shared/logger";
+
 import { useSelectedCellStore, useDateTimeStore } from "../../stores/index";
 import HistoryTags from "../../components/Tag";
 
@@ -192,63 +193,159 @@ const GT1: React.FC = () => {
 
   return (
     <div>
-      {/* <DateTime /> */}
-      {/* <HistoryTags history={history} /> */}
-
-      <Title
-        level={4}
+      <Card
+        bodyStyle={{ padding: 16 }}
         style={{
-          margin: 0,
-          marginTop: 5,
-          marginLeft: 5,
-          textAlign: "center",
+          margin: "16px 16px 12px 16px",
+          borderRadius: "8px",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+          backgroundColor: "white",
+          backdropFilter: "blur(8px)",
+          border: "1px solid rgba(231, 234, 237, 0.8)",
         }}
       >
-        예측 시간대 설정
-      </Title>
+        <Flex vertical gap="24px">
+          <Flex
+            align="center"
+            justify="center"
+            style={{
+              borderBottom: "1px solid rgba(240, 240, 240, 0.8)",
+              paddingBottom: "6px",
+              paddingTop: "0px",
+              width: "100%",
+            }}
+          >
+            <ClockCircleOutlined
+              style={{
+                fontSize: "18px",
+                marginRight: "8px",
+                color: "rgba(0, 0, 0, 0.65)",
+              }}
+            />
+            <Title
+              level={4}
+              style={{ margin: 0, color: "rgba(0, 0, 0, 0.85)" }}
+            >
+              예측 시간대 설정
+            </Title>
+          </Flex>
 
-      <div
-        style={{
-          margin: 10,
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <div style={{ marginBottom: 10, marginRight: 10 }}>
-          <Title level={5} style={{ textAlign: "center" }}>
-            조회 시점{" "}
-          </Title>
-          <DatePicker
-            value={scopeDate}
-            onChange={handleScopeDateChange}
-            disabledDate={disabledScopeDate}
-          />
-        </div>
+          <Flex justify="center" gap="32px" align="start">
+            <Flex vertical gap="8px">
+              <Flex align="center" gap="8px">
+                <CalendarOutlined style={{ color: "rgba(0, 0, 0, 0.65)" }} />
+                <Title
+                  level={5}
+                  style={{
+                    margin: 0,
+                    color: "rgba(0, 0, 0, 0.75)",
+                  }}
+                >
+                  조회 시점
+                </Title>
+              </Flex>
+              <DatePicker
+                value={scopeDate}
+                onChange={handleScopeDateChange}
+                disabledDate={disabledScopeDate}
+                style={{
+                  width: "160px",
+                  backgroundColor: "rgba(255, 255, 255, 0.9)",
+                  border: "1px solid rgba(217, 217, 217, 0.8)",
+                }}
+              />
+            </Flex>
 
-        <div style={{ marginBottom: 10, marginRight: 10 }}>
-          <Title level={5} style={{ textAlign: "center" }}>
-            예측 시점
-          </Title>
-          <DatePicker
-            value={predictionDate}
-            onChange={handlePredictionDateChange}
-            disabledDate={disabledPredictionDate}
-          />
-        </div>
+            <Flex vertical gap="8px">
+              <Flex align="center" gap="8px">
+                <CalendarOutlined style={{ color: "rgba(0, 0, 0, 0.65)" }} />
+                <Title
+                  level={5}
+                  style={{
+                    margin: 0,
+                    color: "rgba(0, 0, 0, 0.75)",
+                  }}
+                >
+                  예측 시점
+                </Title>
+              </Flex>
+              <DatePicker
+                value={predictionDate}
+                onChange={handlePredictionDateChange}
+                disabledDate={disabledPredictionDate}
+                style={{
+                  width: "160px",
+                  backgroundColor: "rgba(255, 255, 255, 0.9)",
+                  border: "1px solid rgba(217, 217, 217, 0.8)",
+                }}
+              />
+            </Flex>
 
-        <div>
-          <Title level={5} style={{ textAlign: "center" }}>
-            예측 시간 (최대 4개)
-          </Title>
-          <Checkbox.Group
-            options={timeOptions}
-            value={predictionTimes}
-            onChange={handleTimeChange}
-          />
-        </div>
-      </div>
+            <Flex vertical gap="8px" style={{ minWidth: "360px" }}>
+              <Flex align="center" gap="8px">
+                <ClockCircleOutlined style={{ color: "rgba(0, 0, 0, 0.65)" }} />
+                <Title
+                  level={5}
+                  style={{
+                    margin: 0,
+                    color: "rgba(0, 0, 0, 0.75)",
+                  }}
+                >
+                  예측 시간 (최대 4개)
+                </Title>
+              </Flex>
+              <Flex gap="8px" wrap="wrap">
+                {timeOptions.map((option) => (
+                  <Button
+                    key={option.value}
+                    type={
+                      predictionTimes.includes(option.value)
+                        ? "default"
+                        : "default"
+                    }
+                    onClick={() => {
+                      const newTimes = predictionTimes.includes(option.value)
+                        ? predictionTimes.filter(
+                            (time) => time !== option.value
+                          )
+                        : [...predictionTimes, option.value].slice(0, 4);
+                      handleTimeChange(newTimes);
+                    }}
+                    style={{
+                      width: "70px",
+                      height: "32px",
+                      borderRadius: "16px",
+                      backgroundColor: predictionTimes.includes(option.value)
+                        ? "#2b3674" // 진한 남색으로 변경
+                        : "#ffffff",
+                      border: `1px solid ${
+                        predictionTimes.includes(option.value)
+                          ? "#1a2356"
+                          : "#d9d9d9"
+                      }`,
+                      color: predictionTimes.includes(option.value)
+                        ? "#ffffff"
+                        : "#595959", // 텍스트 색상을 흰색으로
+                      fontWeight: predictionTimes.includes(option.value)
+                        ? "500"
+                        : "400",
+                      transition: "all 0.01s ease",
+                      boxShadow: predictionTimes.includes(option.value)
+                        ? "0 2px 4px rgba(43, 54, 116, 0.25)" // 그림자 색상도 남색으로
+                        : "none",
+                    }}
+                  >
+                    {option.label}
+                  </Button>
+                ))}
+              </Flex>
+            </Flex>
+          </Flex>
+        </Flex>
+      </Card>
+
       <HistoryTags history={history} />
-      <Title level={3} style={{ margin: 0, marginTop: 5, marginLeft: 10 }}>
+      <Title level={3} style={{ margin: "12px 0 0 16px" }}>
         예측 차트
       </Title>
 
